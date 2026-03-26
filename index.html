@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de ROI - MIIA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .card-result { transition: all 0.3s ease; }
+        .card-result:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <div class="max-w-5xl mx-auto px-4 py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Simulador de Eficiência Operacional MIIA</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubra o impacto financeiro e o ganho de produtividade ao automatizar a gestão de avaliações na sua instituição.</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-semibold mb-6 border-b pb-2">Dados da Instituição</h2>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Qtd. de Professores/Coordenadores</label>
+                        <input type="number" id="profs" value="50" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Avaliações por Semestre (por prof.)</label>
+                        <input type="number" id="provas" value="4" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Horas manuais p/ prova (Diagramação + Correção)</label>
+                        <input type="number" id="horasManuais" value="5" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Valor médio da Hora/Aula (R$)</label>
+                        <input type="number" id="valorHora" value="120" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-white">
+                
+                <div class="gradient-bg p-8 rounded-3xl shadow-xl card-result">
+                    <span class="text-blue-400 font-semibold uppercase tracking-wider text-sm">Economia Anual Estimada</span>
+                    <div class="text-5xl font-bold mt-2 mb-4" id="resFinanceiro">R$ 0,00</div>
+                    <p class="text-slate-300 text-sm italic">*Considerando redução de 80% no tempo operacional com a MIIA em 2 semestres.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-result">
+                        <span class="text-gray-500 text-sm block mb-1">Horas Recuperadas</span>
+                        <div class="text-2xl font-bold text-slate-800" id="resHoras">0h</div>
+                        <p class="text-xs text-green-600 mt-1 font-medium">Foco em Ensino</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-result">
+                        <span class="text-gray-500 text-sm block mb-1">Potencial de Escala</span>
+                        <div class="text-2xl font-bold text-slate-800">+25%</div>
+                        <p class="text-xs text-gray-400 mt-1 italic">Sem novas contratações</p>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/SEUNUMERO" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-blue-200">
+                    Falar com Especialista MIIA
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            // Pegar valores
+            const profs = parseFloat(document.getElementById('profs').value) || 0;
+            const provas = parseFloat(document.getElementById('provas').value) || 0;
+            const horasManuais = parseFloat(document.getElementById('horasManuais').value) || 0;
+            const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
+
+            // Lógica: MIIA reduz o tempo em 80% (o professor leva apenas 20% do tempo original)
+            const tempoManualTotalSemestre = profs * provas * horasManuais;
+            const horasPoupadasSemestre = tempoManualTotalSemestre * 0.80;
+            const horasPoupadasAno = horasPoupadasSemestre * 2;
+            
+            const economiaFinanceiraAno = horasPoupadasAno * valorHora;
+
+            // Formatação
+            document.getElementById('resFinanceiro').innerText = economiaFinanceiraAno.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('resHoras').innerText = Math.round(horasPoupadasAno).toLocaleString('pt-BR') + 'h/ano';
+        }
+
+        // Executar ao carregar
+        window.onload = calcular;
+    </script>
+</body>
+</html>
