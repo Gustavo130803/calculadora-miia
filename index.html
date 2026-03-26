@@ -1,103 +1,462 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de ROI - MIIA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .gradient-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
-        .card-result { transition: all 0.3s ease; }
-        .card-result:hover { transform: translateY(-5px); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de ROI · MIIA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+
+    .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e1b4b 100%); }
+    .gradient-card { background: linear-gradient(135deg, #f59e0b, #f97316); }
+    .step-hidden { display: none; }
+
+    input[type=range] { accent-color: #f59e0b; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+
+    @keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
+    .count-up { animation: countUp 0.6s ease forwards; }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; }
+      .print-page { background: white !important; color: #111 !important; padding: 0 !important; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-900">
+<body class="min-h-screen gradient-hero">
 
-    <div class="max-w-5xl mx-auto px-4 py-12">
-        <header class="text-center mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Simulador de Eficiência Operacional MIIA</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Descubra o impacto financeiro e o ganho de produtividade ao automatizar a gestão de avaliações na sua instituição.</p>
-        </header>
-
-        <div class="grid md:grid-cols-2 gap-8 items-start">
-            
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <h2 class="text-xl font-semibold mb-6 border-b pb-2">Dados da Instituição</h2>
-                
-                <div class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Qtd. de Professores/Coordenadores</label>
-                        <input type="number" id="profs" value="50" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Avaliações por Semestre (por prof.)</label>
-                        <input type="number" id="provas" value="4" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Horas manuais p/ prova (Diagramação + Correção)</label>
-                        <input type="number" id="horasManuais" value="5" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Valor médio da Hora/Aula (R$)</label>
-                        <input type="number" id="valorHora" value="120" oninput="calcular()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-6 text-white">
-                
-                <div class="gradient-bg p-8 rounded-3xl shadow-xl card-result">
-                    <span class="text-blue-400 font-semibold uppercase tracking-wider text-sm">Economia Anual Estimada</span>
-                    <div class="text-5xl font-bold mt-2 mb-4" id="resFinanceiro">R$ 0,00</div>
-                    <p class="text-slate-300 text-sm italic">*Considerando redução de 80% no tempo operacional com a MIIA em 2 semestres.</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-result">
-                        <span class="text-gray-500 text-sm block mb-1">Horas Recuperadas</span>
-                        <div class="text-2xl font-bold text-slate-800" id="resHoras">0h</div>
-                        <p class="text-xs text-green-600 mt-1 font-medium">Foco em Ensino</p>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-result">
-                        <span class="text-gray-500 text-sm block mb-1">Potencial de Escala</span>
-                        <div class="text-2xl font-bold text-slate-800">+25%</div>
-                        <p class="text-xs text-gray-400 mt-1 italic">Sem novas contratações</p>
-                    </div>
-                </div>
-
-                <a href="https://wa.me/SEUNUMERO" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-blue-200">
-                    Falar com Especialista MIIA
-                </a>
-            </div>
-        </div>
+<!-- ===================== INTRO ===================== -->
+<div id="step-intro" class="fade-in min-h-screen flex flex-col items-center justify-center px-4 py-16 text-center">
+  <div class="max-w-2xl w-full space-y-8">
+    <div class="inline-block bg-blue-900/50 border border-blue-700/50 text-blue-300 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full">
+      Calculadora de ROI · MIIA
     </div>
 
-    <script>
-        function calcular() {
-            // Pegar valores
-            const profs = parseFloat(document.getElementById('profs').value) || 0;
-            const provas = parseFloat(document.getElementById('provas').value) || 0;
-            const horasManuais = parseFloat(document.getElementById('horasManuais').value) || 0;
-            const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
+    <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">
+      Sua instituição está perdendo<br/>
+      <span class="text-yellow-400">quanto por ano?</span>
+    </h1>
 
-            // Lógica: MIIA reduz o tempo em 80% (o professor leva apenas 20% do tempo original)
-            const tempoManualTotalSemestre = profs * provas * horasManuais;
-            const horasPoupadasSemestre = tempoManualTotalSemestre * 0.80;
-            const horasPoupadasAno = horasPoupadasSemestre * 2;
-            
-            const economiaFinanceiraAno = horasPoupadasAno * valorHora;
+    <p class="text-blue-200 text-lg max-w-xl mx-auto">
+      Descubra em 2 minutos quanto tempo e dinheiro sua equipe docente poderia recuperar com Inteligência Artificial.
+    </p>
 
-            // Formatação
-            document.getElementById('resFinanceiro').innerText = economiaFinanceiraAno.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            document.getElementById('resHoras').innerText = Math.round(horasPoupadasAno).toLocaleString('pt-BR') + 'h/ano';
-        }
+    <button onclick="goTo('step-instituicao')"
+      class="bg-yellow-400 hover:bg-yellow-300 active:scale-95 text-blue-950 font-bold text-lg px-10 py-4 rounded-2xl shadow-lg shadow-yellow-500/20 transition-all">
+      Calcular minha economia →
+    </button>
 
-        // Executar ao carregar
-        window.onload = calcular;
-    </script>
+    <p class="text-blue-500 text-sm">Gratuito · Sem cartão · Leva 2 minutos</p>
+  </div>
+</div>
+
+<!-- ===================== PASSO 1: INSTITUIÇÃO ===================== -->
+<div id="step-instituicao" class="step-hidden min-h-screen flex flex-col items-center justify-center px-4 py-16">
+  <div class="max-w-lg w-full space-y-6 fade-in">
+    <!-- Progress -->
+    <div class="flex gap-2 mb-2">
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-blue-800"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-blue-800"></div>
+    </div>
+
+    <div class="bg-white/10 backdrop-blur border border-white/10 rounded-3xl p-8 space-y-6">
+      <div>
+        <p class="text-blue-300 text-xs font-bold uppercase tracking-wider">Passo 1 de 3</p>
+        <h2 class="text-2xl font-bold text-white mt-1">Sua Instituição</h2>
+        <p class="text-blue-300 text-sm mt-1">Dados básicos para calibrar o cálculo.</p>
+      </div>
+
+      <div class="space-y-4">
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Nome da Instituição</span>
+          <input id="nomeInst" type="text" placeholder="Ex: Faculdade São Paulo"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white placeholder-blue-600 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Número de professores ativos</span>
+          <input id="numProfs" type="number" value="50" min="1"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Número de alunos ativos</span>
+          <input id="numAlunos" type="number" value="500" min="1"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+      </div>
+
+      <button onclick="goTo('step-avaliacoes')"
+        class="w-full bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-bold py-4 rounded-xl transition active:scale-95">
+        Continuar →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PASSO 2: AVALIAÇÕES ===================== -->
+<div id="step-avaliacoes" class="step-hidden min-h-screen flex flex-col items-center justify-center px-4 py-16">
+  <div class="max-w-lg w-full space-y-6 fade-in">
+    <div class="flex gap-2 mb-2">
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-blue-800"></div>
+    </div>
+
+    <div class="bg-white/10 backdrop-blur border border-white/10 rounded-3xl p-8 space-y-6">
+      <div>
+        <p class="text-blue-300 text-xs font-bold uppercase tracking-wider">Passo 2 de 3</p>
+        <h2 class="text-2xl font-bold text-white mt-1">Avaliações e Tempo</h2>
+        <p class="text-blue-300 text-sm mt-1">Seja conservador — o resultado vai surpreender mesmo assim.</p>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-blue-200 text-sm font-medium">Avaliações por professor por semestre</span>
+            <span id="valAval" class="text-yellow-400 font-bold text-lg">4</span>
+          </div>
+          <input id="numAval" type="range" min="1" max="12" value="4"
+            oninput="document.getElementById('valAval').textContent = this.value; calcPreview()"
+            class="w-full h-2 rounded-full" />
+          <div class="flex justify-between text-blue-600 text-xs mt-1"><span>1</span><span>12</span></div>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-blue-200 text-sm font-medium">Horas por prova hoje (diagramação + correção)</span>
+            <span id="valHoras" class="text-yellow-400 font-bold text-lg">5h</span>
+          </div>
+          <input id="horasProva" type="range" min="1" max="12" step="0.5" value="5"
+            oninput="document.getElementById('valHoras').textContent = this.value + 'h'; calcPreview()"
+            class="w-full h-2 rounded-full" />
+          <div class="flex justify-between text-blue-600 text-xs mt-1"><span>1h</span><span>12h</span></div>
+        </div>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Valor médio da hora/aula do docente (R$)</span>
+          <input id="valorHora" type="number" value="150" min="20" step="10"
+            oninput="calcPreview()"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+      </div>
+
+      <!-- Preview -->
+      <div class="bg-blue-950/60 border border-blue-700 rounded-xl p-4 text-center">
+        <p class="text-blue-400 text-xs uppercase tracking-wider mb-1">Pré-visualização</p>
+        <p id="previewValor" class="text-white font-extrabold text-3xl">R$ 0</p>
+        <p id="previewHoras" class="text-blue-300 text-xs mt-1">0 horas recuperadas/ano</p>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="goTo('step-instituicao')"
+          class="flex-1 border border-blue-600 text-blue-300 font-medium py-4 rounded-xl hover:bg-blue-800/30 transition">
+          ← Voltar
+        </button>
+        <button onclick="goTo('step-lead')"
+          class="flex-[2] bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-bold py-4 rounded-xl transition active:scale-95">
+          Ver resultado completo →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PASSO 3: LEAD ===================== -->
+<div id="step-lead" class="step-hidden min-h-screen flex flex-col items-center justify-center px-4 py-16">
+  <div class="max-w-lg w-full space-y-6 fade-in">
+    <div class="flex gap-2 mb-2">
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+      <div class="h-1.5 flex-1 rounded-full bg-yellow-400"></div>
+    </div>
+
+    <div class="bg-white/10 backdrop-blur border border-white/10 rounded-3xl p-8 space-y-6">
+      <div>
+        <p class="text-blue-300 text-xs font-bold uppercase tracking-wider">Passo 3 de 3</p>
+        <h2 class="text-2xl font-bold text-white mt-1">Quase lá!</h2>
+        <p class="text-blue-300 text-sm mt-1">Para onde enviamos seu relatório personalizado?</p>
+      </div>
+
+      <form id="leadForm" onsubmit="submitLead(event)" class="space-y-4">
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Seu nome</span>
+          <input id="leadNome" type="text" required placeholder="João Silva"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white placeholder-blue-600 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">E-mail institucional</span>
+          <input id="leadEmail" type="email" required placeholder="joao@faculdade.edu.br"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white placeholder-blue-600 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">WhatsApp</span>
+          <input id="leadWpp" type="tel" required placeholder="(11) 99999-9999"
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white placeholder-blue-600 rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition" />
+        </label>
+
+        <label class="block">
+          <span class="text-blue-200 text-sm font-medium">Seu cargo</span>
+          <select id="leadCargo" required
+            class="mt-1 w-full bg-blue-950/60 border border-blue-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-yellow-400 transition">
+            <option value="" disabled selected>Selecione...</option>
+            <option value="Diretor Acadêmico">Diretor(a) Acadêmico</option>
+            <option value="Reitor/Proprietário">Reitor(a) / Proprietário(a)</option>
+            <option value="Coordenador de Curso">Coordenador(a) de Curso</option>
+            <option value="TI/Tecnologia">TI / Tecnologia</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </label>
+
+        <div id="leadError" class="hidden text-red-400 text-sm text-center"></div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="goTo('step-avaliacoes')"
+            class="flex-1 border border-blue-600 text-blue-300 font-medium py-4 rounded-xl hover:bg-blue-800/30 transition">
+            ← Voltar
+          </button>
+          <button type="submit" id="leadBtn"
+            class="flex-[2] bg-yellow-400 hover:bg-yellow-300 text-blue-950 font-bold py-4 rounded-xl transition active:scale-95">
+            Ver meu resultado →
+          </button>
+        </div>
+        <p class="text-blue-600 text-xs text-center">Seus dados são usados apenas para envio do relatório.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RESULTADO ===================== -->
+<div id="step-resultado" class="step-hidden px-4 py-12 print-page">
+  <div class="max-w-3xl mx-auto space-y-6 fade-in">
+
+    <!-- Header -->
+    <div class="text-center no-print">
+      <div class="inline-block bg-green-500/20 border border-green-500/30 text-green-400 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-3">
+        Análise concluída
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Seu Relatório de ROI</h2>
+      <p id="resSubtitle" class="text-blue-300 text-sm mt-1"></p>
+    </div>
+
+    <!-- Print header -->
+    <div class="hidden print:block text-center mb-4">
+      <h1 class="text-2xl font-bold text-gray-900">Relatório de ROI · MIIA</h1>
+      <p id="resPrintSub" class="text-gray-500 text-sm"></p>
+    </div>
+
+    <!-- Cards principais -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="gradient-card rounded-2xl p-6 text-white">
+        <p class="text-xs font-bold uppercase tracking-wider opacity-80">Economia Anual</p>
+        <p id="resEconomia" class="text-4xl font-extrabold mt-2 count-up">R$ 0</p>
+        <p class="text-sm mt-2 opacity-80">em custos operacionais diretos</p>
+      </div>
+      <div class="bg-white/10 border border-white/10 rounded-2xl p-6 text-white">
+        <p class="text-xs font-bold uppercase tracking-wider text-blue-300">Horas Recuperadas</p>
+        <p id="resHoras" class="text-4xl font-extrabold mt-2">0h</p>
+        <p id="resHorasSemana" class="text-sm mt-2 text-blue-300">por ano</p>
+      </div>
+      <div class="bg-white/10 border border-white/10 rounded-2xl p-6 text-white">
+        <p class="text-xs font-bold uppercase tracking-wider text-blue-300">Escala Possível</p>
+        <p id="resEscala" class="text-4xl font-extrabold mt-2">+0</p>
+        <p class="text-sm mt-2 text-blue-300">alunos sem novas contratações</p>
+      </div>
+    </div>
+
+    <!-- Detalhamento -->
+    <div class="bg-white/10 border border-white/10 rounded-2xl p-6">
+      <h3 class="text-white font-bold text-lg mb-4">Como chegamos nesses números</h3>
+      <div id="resDetalhes" class="space-y-3 text-sm"></div>
+    </div>
+
+    <!-- Resumo executivo -->
+    <div class="bg-blue-900/50 border border-blue-700/50 rounded-2xl p-6">
+      <p id="resResumo" class="text-white text-base leading-relaxed"></p>
+    </div>
+
+    <!-- CTA -->
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center space-y-4 no-print">
+      <p id="resCTATitle" class="text-white font-semibold text-lg"></p>
+      <p class="text-blue-200 text-sm">Um especialista MIIA pode mostrar uma demonstração personalizada em 30 minutos.</p>
+      <a id="resCTAWpp" href="#" target="_blank"
+        class="inline-block bg-green-500 hover:bg-green-400 text-white font-bold px-8 py-4 rounded-xl transition text-lg">
+        Quero uma demonstração gratuita
+      </a>
+    </div>
+
+    <!-- Ações -->
+    <div class="flex flex-wrap gap-3 justify-center no-print">
+      <button onclick="window.print()"
+        class="border border-blue-600 text-blue-300 px-6 py-2.5 rounded-xl hover:bg-blue-800/40 transition text-sm font-medium">
+        Imprimir / Salvar PDF
+      </button>
+      <button onclick="novaSimulacao()"
+        class="border border-blue-700 text-blue-400 px-6 py-2.5 rounded-xl hover:bg-blue-900/40 transition text-sm">
+        Nova simulação
+      </button>
+    </div>
+
+    <p class="hidden print:block text-center text-gray-400 text-xs mt-8">
+      Relatório gerado por MIIA · Este documento é uma estimativa baseada nos dados informados.
+    </p>
+  </div>
+</div>
+
+<script>
+  // ── Navegação ──────────────────────────────────────────────
+  const steps = ['step-intro','step-instituicao','step-avaliacoes','step-lead','step-resultado'];
+
+  function goTo(id) {
+    steps.forEach(s => {
+      const el = document.getElementById(s);
+      el.classList.add('step-hidden');
+      el.classList.remove('fade-in');
+    });
+    const target = document.getElementById(id);
+    target.classList.remove('step-hidden');
+    void target.offsetWidth; // reflow para reativar animação
+    target.classList.add('fade-in');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (id === 'step-avaliacoes') calcPreview();
+  }
+
+  // ── Preview em tempo real ──────────────────────────────────
+  function calcPreview() {
+    const { horasRecup, economia } = calcROI();
+    document.getElementById('previewValor').textContent = fmtBRL(economia);
+    document.getElementById('previewHoras').textContent = fmt(horasRecup) + ' horas recuperadas/ano';
+  }
+
+  // ── Cálculo principal ──────────────────────────────────────
+  function calcROI() {
+    const profs     = parseFloat(document.getElementById('numProfs')?.value)  || 50;
+    const alunos    = parseFloat(document.getElementById('numAlunos')?.value) || 500;
+    const aval      = parseFloat(document.getElementById('numAval')?.value)   || 4;
+    const horas     = parseFloat(document.getElementById('horasProva')?.value)|| 5;
+    const valorHora = parseFloat(document.getElementById('valorHora')?.value) || 150;
+
+    const totalProvasAno   = profs * aval * 2;           // 2 semestres
+    const horasAtualAno    = totalProvasAno * horas;
+    const horasMIIAAno     = totalProvasAno * 0.5;       // 30 min com MIIA
+    const horasRecup       = horasAtualAno - horasMIIAAno;
+    const economia         = horasRecup * valorHora;
+    const reducao          = Math.round((horasRecup / horasAtualAno) * 100);
+    const escala           = Math.round(alunos * 0.22);
+    const horasSemana      = Math.round(horasRecup / 48);
+
+    return { profs, alunos, aval, horas, valorHora, totalProvasAno, horasRecup, economia, reducao, escala, horasSemana };
+  }
+
+  // ── Formatação ─────────────────────────────────────────────
+  function fmt(n) {
+    return Math.round(n).toLocaleString('pt-BR');
+  }
+  function fmtBRL(n) {
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 });
+  }
+
+  // ── Submit do lead ─────────────────────────────────────────
+  async function submitLead(e) {
+    e.preventDefault();
+    const btn = document.getElementById('leadBtn');
+    btn.textContent = 'Calculando...';
+    btn.disabled = true;
+
+    const nome  = document.getElementById('leadNome').value;
+    const email = document.getElementById('leadEmail').value;
+    const wpp   = document.getElementById('leadWpp').value;
+    const cargo = document.getElementById('leadCargo').value;
+    const inst  = document.getElementById('nomeInst').value;
+
+    // Envio para Formspree (substitua YOUR_FORM_ID pelo ID do seu formulário em formspree.io)
+    const FORMSPREE_ID = 'YOUR_FORM_ID';
+    const roi = calcROI();
+
+    try {
+      await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          nome, email, whatsapp: wpp, cargo, instituicao: inst,
+          num_professores: roi.profs,
+          num_alunos: roi.alunos,
+          horas_recuperadas: roi.horasRecup,
+          economia_anual: roi.economia,
+        })
+      });
+    } catch (_) { /* silencioso — mostra resultado mesmo assim */ }
+
+    mostrarResultado({ nome, email, wpp, cargo, inst, ...roi });
+  }
+
+  // ── Montar resultado ───────────────────────────────────────
+  function mostrarResultado(d) {
+    const firstName = d.nome ? d.nome.split(' ')[0] : '';
+    const instName  = d.inst || 'sua instituição';
+
+    document.getElementById('resSubtitle').textContent =
+      `Análise para ${instName} · ${new Date().toLocaleDateString('pt-BR')}`;
+    document.getElementById('resPrintSub').textContent =
+      `${instName} · ${new Date().toLocaleDateString('pt-BR')}`;
+
+    document.getElementById('resEconomia').textContent = fmtBRL(d.economia);
+    document.getElementById('resHoras').textContent    = fmt(d.horasRecup) + 'h';
+    document.getElementById('resHorasSemana').textContent = `por ano · ${fmt(d.horasSemana)}h/semana`;
+    document.getElementById('resEscala').textContent   = '+' + fmt(d.escala);
+
+    const detalhes = [
+      { l: 'Provas/avaliações corrigidas por ano',       v: fmt(d.totalProvasAno) },
+      { l: 'Tempo de correção ATUAL por avaliação',      v: d.horas + 'h' },
+      { l: 'Tempo de correção COM MIIA por avaliação',   v: '30 min' },
+      { l: `Redução de tempo (${d.reducao}%)`,           v: fmt(d.horasRecup) + ' horas/ano' },
+      { l: 'Valor da hora docente considerado',          v: fmtBRL(d.valorHora) },
+    ];
+    document.getElementById('resDetalhes').innerHTML = detalhes.map(r => `
+      <div class="flex justify-between items-center border-b border-white/10 pb-2">
+        <span class="text-blue-200">${r.l}</span>
+        <span class="text-white font-semibold">${r.v}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('resResumo').innerHTML =
+      `<span class="font-bold text-yellow-400">Resumo executivo:</span> Com ${fmt(d.profs)} professores realizando
+      ${d.aval} avaliações por semestre, sua equipe gasta hoje
+      <strong>${fmt(d.horasRecup + d.totalProvasAno * 0.5)} horas/ano</strong> apenas em correção e diagramação.
+      A MIIA reduz isso para <strong class="text-yellow-400">${fmt(d.totalProvasAno * 0.5)} horas</strong> —
+      liberando ${fmt(d.horasRecup)} horas para ensino de qualidade e representando
+      <strong>${fmtBRL(d.economia)}</strong> em valor recuperado anualmente.`;
+
+    document.getElementById('resCTATitle').textContent =
+      firstName ? `${firstName}, quer ver como funciona na prática?` : 'Quer ver como funciona na prática?';
+
+    const msg = encodeURIComponent(
+      `Olá! Acabei de usar a calculadora de ROI da MIIA. Minha instituição: ${instName}. ` +
+      `Resultado: ${fmtBRL(d.economia)} de economia estimada/ano. Gostaria de ver uma demonstração!`
+    );
+    document.getElementById('resCTAWpp').href = `https://wa.me/5511999999999?text=${msg}`;
+
+    goTo('step-resultado');
+  }
+
+  // ── Reset ─────────────────────────────────────────────────
+  function novaSimulacao() {
+    document.getElementById('leadForm').reset();
+    document.getElementById('leadBtn').textContent = 'Ver meu resultado →';
+    document.getElementById('leadBtn').disabled = false;
+    goTo('step-intro');
+  }
+
+  // Init preview
+  calcPreview();
+</script>
 </body>
 </html>
