@@ -6,137 +6,306 @@
   <title>Calculadora de ROI · MIIA</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
-    body { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e1b4b 100%); min-height: 100vh; }
-    input[type=range] { accent-color: #f59e0b; cursor: pointer; }
+    :root {
+      --brand-dark:    #1C052B;
+      --brand-purple:  #801DFF;
+      --brand-violet:  #A535FF;
+      --brand-orange:  #F39D60;
+      --brand-cream:   #EEECDF;
+    }
 
-    .card { background: rgba(255,255,255,0.07); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
-    .result-card { transition: transform 0.2s ease; }
-    .result-card:hover { transform: translateY(-3px); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sora', sans-serif;
+      background-color: var(--brand-dark);
+      min-height: 100vh;
+      color: #fff;
+    }
+    h1, h2, h3, .heading { font-family: 'Raleway', sans-serif; }
 
-    @keyframes pop { 0%{transform:scale(0.96);opacity:0} 100%{transform:scale(1);opacity:1} }
-    .pop { animation: pop 0.3s ease forwards; }
+    /* Gradient text for MIIA logo */
+    .logo-text {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      background: linear-gradient(90deg, #fff 0%, var(--brand-violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(128, 29, 255, 0.08);
+      border: 1px solid rgba(165, 53, 255, 0.2);
+      border-radius: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(165, 53, 255, 0.4); }
+
+    /* Main result card */
+    .card-main {
+      background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-violet) 100%);
+      border: none;
+      border-radius: 1.25rem;
+    }
+
+    /* Orange accent card */
+    .card-orange {
+      background: linear-gradient(135deg, #F39D60 0%, #f97316 100%);
+      border: none;
+      border-radius: 1.25rem;
+    }
+
+    /* Range input */
+    input[type=range] { accent-color: var(--brand-violet); cursor: pointer; }
+
+    /* Number input */
+    input[type=number] {
+      background: rgba(128, 29, 255, 0.1);
+      border: 1px solid rgba(165, 53, 255, 0.3);
+      color: #fff;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      width: 100%;
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type=number]:focus { border-color: var(--brand-violet); }
+    input[type=number]::-webkit-inner-spin-button { opacity: 0.4; }
+
+    /* Divider line */
+    .divider { border-color: rgba(165, 53, 255, 0.15); }
+
+    /* Value badge */
+    .value-badge {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      color: var(--brand-orange);
+      font-size: 1.1rem;
+      min-width: 2.5rem;
+      text-align: right;
+    }
+
+    /* CTA button */
+    .btn-cta {
+      background: linear-gradient(135deg, var(--brand-purple), var(--brand-violet));
+      color: #fff;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 700;
+      border: none;
+      border-radius: 0.875rem;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .btn-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-cta:active { transform: scale(0.98); }
+
+    .btn-outline {
+      background: transparent;
+      color: rgba(165, 53, 255, 0.8);
+      font-family: 'Sora', sans-serif;
+      font-weight: 500;
+      border: 1px solid rgba(165, 53, 255, 0.3);
+      border-radius: 0.875rem;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--brand-violet); color: var(--brand-violet); }
+
+    /* Tag */
+    .tag {
+      display: inline-block;
+      background: rgba(165, 53, 255, 0.15);
+      border: 1px solid rgba(165, 53, 255, 0.3);
+      color: var(--brand-violet);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+    }
+
+    /* Result number */
+    .result-number {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 900;
+    }
+
+    /* Detail row */
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(165, 53, 255, 0.1);
+      font-size: 0.85rem;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: rgba(255,255,255,0.5); font-family: 'Sora', sans-serif; }
+    .detail-value { color: #fff; font-weight: 600; font-family: 'Raleway', sans-serif; }
+
+    /* Stripe subtle */
+    .stripe {
+      background: linear-gradient(90deg, var(--brand-purple), var(--brand-violet));
+      height: 3px;
+      width: 48px;
+      border-radius: 999px;
+    }
 
     @media print {
       .no-print { display: none !important; }
-      body { background: white !important; min-height: unset; }
-      .card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+      body { background: white !important; color: #111 !important; }
+      .card { background: #f5f0ff !important; border: 1px solid #ddd !important; }
+      .card-main { background: #801DFF !important; }
     }
   </style>
 </head>
-<body class="px-4 py-10">
+<body>
 
-<div class="max-w-5xl mx-auto space-y-8">
+<div style="max-width:1100px; margin:0 auto; padding:2.5rem 1.25rem 4rem;">
 
   <!-- Header -->
-  <div class="text-center space-y-3 no-print">
-    <span class="inline-block bg-blue-900/60 border border-blue-700/50 text-blue-300 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full">
-      Calculadora de ROI · MIIA
-    </span>
-    <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-      Quanto sua instituição ganha com IA?
+  <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3.5rem;" class="no-print">
+    <span class="logo-text">MIIA</span>
+    <span class="tag">Calculadora de ROI</span>
+  </header>
+
+  <!-- Hero text -->
+  <div style="text-align:center; margin-bottom:3rem;" class="no-print">
+    <h1 class="heading" style="font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900; line-height:1.15; margin-bottom:1rem;">
+      Quanto sua instituição está<br/>
+      <span style="background:linear-gradient(90deg,var(--brand-purple),var(--brand-orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
+        perdendo por ano?
+      </span>
     </h1>
-    <p class="text-blue-300 text-base max-w-xl mx-auto">
-      Preencha os dados abaixo e veja em tempo real o impacto financeiro e operacional da MIIA na sua instituição.
+    <p style="color:rgba(255,255,255,0.5); font-size:1rem; max-width:480px; margin:0 auto; line-height:1.6;">
+      Ajuste os dados abaixo e veja em tempo real o impacto financeiro da MIIA na sua operação acadêmica.
     </p>
   </div>
 
-  <!-- Layout principal -->
-  <div class="grid md:grid-cols-2 gap-6 items-start">
+  <!-- Grid: Inputs + Resultados -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;" id="mainGrid">
 
     <!-- INPUTS -->
-    <div class="card p-8 space-y-7">
-      <h2 class="text-white font-bold text-lg border-b border-white/10 pb-3">Dados da Instituição</h2>
-
-      <!-- Professores -->
-      <div class="space-y-2">
-        <div class="flex justify-between items-center">
-          <label class="text-blue-200 text-sm font-medium">Número de professores ativos</label>
-          <span id="lblProfs" class="text-yellow-400 font-bold text-base">50</span>
-        </div>
-        <input type="range" id="profs" min="5" max="500" step="5" value="50"
-          oninput="sync('profs','lblProfs',''); calc()"
-          class="w-full h-2 rounded-full" />
-        <div class="flex justify-between text-blue-700 text-xs"><span>5</span><span>500</span></div>
+    <div class="card" style="padding:2rem;">
+      <div style="margin-bottom:1.75rem;">
+        <div class="stripe" style="margin-bottom:0.75rem;"></div>
+        <h2 class="heading" style="font-size:1.1rem; font-weight:700; color:#fff;">Dados da Instituição</h2>
+        <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">Mova os controles para ajustar os valores</p>
       </div>
 
-      <!-- Avaliações -->
-      <div class="space-y-2">
-        <div class="flex justify-between items-center">
-          <label class="text-blue-200 text-sm font-medium">Avaliações por professor por semestre</label>
-          <span id="lblAval" class="text-yellow-400 font-bold text-base">4</span>
-        </div>
-        <input type="range" id="aval" min="1" max="12" step="1" value="4"
-          oninput="sync('aval','lblAval',''); calc()"
-          class="w-full h-2 rounded-full" />
-        <div class="flex justify-between text-blue-700 text-xs"><span>1</span><span>12</span></div>
-      </div>
+      <div style="display:flex; flex-direction:column; gap:1.75rem;">
 
-      <!-- Horas por prova -->
-      <div class="space-y-2">
-        <div class="flex justify-between items-center">
-          <label class="text-blue-200 text-sm font-medium">Horas gastas por avaliação hoje</label>
-          <span id="lblHoras" class="text-yellow-400 font-bold text-base">5h</span>
+        <!-- Professores -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Professores ativos</label>
+            <span class="value-badge" id="lblProfs">50</span>
+          </div>
+          <input type="range" id="profs" min="5" max="500" step="5" value="50"
+            oninput="syncLabel('profs','lblProfs',''); calc()"
+            style="width:100%; height:4px; border-radius:99px;" />
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
+            <span>5</span><span>500</span>
+          </div>
         </div>
-        <input type="range" id="horas" min="1" max="12" step="0.5" value="5"
-          oninput="sync('horas','lblHoras','h'); calc()"
-          class="w-full h-2 rounded-full" />
-        <div class="flex justify-between text-blue-700 text-xs"><span>1h</span><span>12h</span></div>
-        <p class="text-blue-600 text-xs">Inclui: criação, diagramação e correção manual</p>
-      </div>
 
-      <!-- Valor hora -->
-      <div class="space-y-2">
-        <label class="text-blue-200 text-sm font-medium block">Valor médio da hora/aula do docente</label>
-        <div class="relative">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400 font-medium text-sm">R$</span>
-          <input type="number" id="valorHora" value="150" min="20" step="10"
-            oninput="calc()"
-            class="w-full bg-blue-950/60 border border-blue-700 text-white rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-yellow-400 transition text-base" />
+        <!-- Avaliações -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Avaliações por professor / semestre</label>
+            <span class="value-badge" id="lblAval">4</span>
+          </div>
+          <input type="range" id="aval" min="1" max="12" step="1" value="4"
+            oninput="syncLabel('aval','lblAval',''); calc()"
+            style="width:100%; height:4px; border-radius:99px;" />
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
+            <span>1</span><span>12</span>
+          </div>
         </div>
+
+        <!-- Horas por prova -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Horas por avaliação hoje</label>
+            <span class="value-badge" id="lblHoras">5h</span>
+          </div>
+          <input type="range" id="horas" min="1" max="12" step="0.5" value="5"
+            oninput="syncLabel('horas','lblHoras','h'); calc()"
+            style="width:100%; height:4px; border-radius:99px;" />
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
+            <span>1h</span><span>12h</span>
+          </div>
+          <p style="font-size:0.72rem; color:rgba(255,255,255,0.3); margin-top:0.4rem;">Inclui criação, diagramação e correção manual</p>
+        </div>
+
+        <!-- Valor hora -->
+        <div>
+          <label style="font-size:0.82rem; color:rgba(255,255,255,0.65); display:block; margin-bottom:0.5rem;">
+            Valor médio da hora/aula do docente
+          </label>
+          <div style="position:relative;">
+            <span style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:rgba(165,53,255,0.6); font-size:0.85rem; font-weight:600;">R$</span>
+            <input type="number" id="valorHora" value="150" min="20" step="10" oninput="calc()" />
+          </div>
+        </div>
+
       </div>
     </div>
 
     <!-- RESULTADOS -->
-    <div class="space-y-4">
+    <div style="display:flex; flex-direction:column; gap:1rem;">
 
-      <!-- Economia principal -->
-      <div class="card result-card p-7" style="background: linear-gradient(135deg,#f59e0b,#f97316);">
-        <p class="text-yellow-100 text-xs font-bold uppercase tracking-wider">Economia Financeira Anual</p>
-        <p id="resEconomia" class="text-5xl font-extrabold text-white mt-2">R$ 0</p>
-        <p class="text-yellow-100/80 text-sm mt-2">em custos operacionais diretos com corpo docente</p>
+      <!-- Card principal: Economia -->
+      <div class="card-main" style="padding:1.75rem;">
+        <p style="font-family:'Sora',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; opacity:0.8; margin-bottom:0.5rem;">
+          Economia Financeira Anual
+        </p>
+        <p id="resEconomia" class="result-number" style="font-size:clamp(2rem,4vw,3rem); line-height:1.1; margin-bottom:0.5rem;">
+          R$ 0
+        </p>
+        <p style="font-size:0.8rem; opacity:0.75;">em custos operacionais com corpo docente</p>
       </div>
 
       <!-- Horas + Escala -->
-      <div class="grid grid-cols-2 gap-4">
-        <div class="card result-card p-6">
-          <p class="text-blue-300 text-xs font-bold uppercase tracking-wider">Horas Recuperadas</p>
-          <p id="resHoras" class="text-3xl font-extrabold text-white mt-2">0h</p>
-          <p id="resHorasSemana" class="text-blue-400 text-xs mt-1">por ano</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="card" style="padding:1.5rem;">
+          <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.4rem;">Horas Recuperadas</p>
+          <p id="resHoras" class="result-number" style="font-size:1.8rem; color:#fff;">0h</p>
+          <p id="resHorasSemana" style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">por ano</p>
         </div>
-        <div class="card result-card p-6">
-          <p class="text-blue-300 text-xs font-bold uppercase tracking-wider">Ganho de Escala</p>
-          <p class="text-3xl font-extrabold text-white mt-2">+22%</p>
-          <p class="text-blue-400 text-xs mt-1">capacidade sem novas contratações</p>
+        <div class="card" style="padding:1.5rem;">
+          <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.4rem;">Ganho de Escala</p>
+          <p class="result-number" style="font-size:1.8rem; color:#fff;">+22%</p>
+          <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">sem novas contratações</p>
         </div>
       </div>
 
       <!-- Detalhes do cálculo -->
-      <div class="card p-6">
-        <p class="text-blue-300 text-xs font-bold uppercase tracking-wider mb-3">Como calculamos</p>
-        <div id="detalhes" class="space-y-2 text-sm"></div>
+      <div class="card" style="padding:1.5rem;">
+        <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.75rem;">Como calculamos</p>
+        <div id="detalhes"></div>
       </div>
 
-      <!-- Ações -->
-      <div class="flex gap-3 no-print">
-        <a id="btnWpp" href="#" target="_blank"
-          class="flex-[2] text-center bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 rounded-xl transition text-sm active:scale-95">
+      <!-- CTA -->
+      <div class="no-print" style="display:flex; gap:0.75rem;">
+        <a id="btnWpp" href="#" target="_blank" class="btn-cta" style="flex:2;">
           Falar com especialista MIIA
         </a>
-        <button onclick="window.print()"
-          class="flex-1 border border-blue-600 text-blue-300 font-medium py-3.5 rounded-xl hover:bg-blue-800/30 transition text-sm">
+        <button onclick="window.print()" class="btn-outline" style="flex:1;">
           Salvar PDF
         </button>
       </div>
@@ -144,21 +313,30 @@
     </div>
   </div>
 
-  <p class="text-center text-blue-700 text-xs no-print pb-4">
-    MIIA · Inteligência Artificial para Educação · Os valores são estimativas baseadas nos dados informados.
+  <!-- Footer -->
+  <p class="no-print" style="text-align:center; font-size:0.72rem; color:rgba(255,255,255,0.2); margin-top:3rem; font-family:'Sora',sans-serif;">
+    MIIA · Inteligência Artificial para Educação · Valores são estimativas baseadas nos dados informados.
   </p>
+
 </div>
 
-<script>
-  const WPP_NUMBER = '5511999999999'; // ← substitua pelo número real da MIIA
+<!-- Responsive: empilhar em mobile -->
+<style>
+  @media (max-width: 700px) {
+    #mainGrid { grid-template-columns: 1fr !important; }
+  }
+</style>
 
-  function sync(inputId, labelId, suffix) {
+<script>
+  const WPP = '5511999999999'; // ← substitua pelo número real da MIIA
+
+  function syncLabel(inputId, labelId, suffix) {
     document.getElementById(labelId).textContent = document.getElementById(inputId).value + suffix;
   }
 
   function fmt(n) { return Math.round(n).toLocaleString('pt-BR'); }
   function fmtBRL(n) {
-    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 });
+    return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL', minimumFractionDigits:0 });
   }
 
   function calc() {
@@ -167,36 +345,36 @@
     const horas     = parseFloat(document.getElementById('horas').value)     || 0;
     const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
 
-    const totalProvasAno = profs * aval * 2;        // 2 semestres
-    const horasAtualAno  = totalProvasAno * horas;
-    const horasMIIAAno   = totalProvasAno * 0.5;    // 30 min com MIIA
-    const horasRecup     = horasAtualAno - horasMIIAAno;
-    const economia       = horasRecup * valorHora;
-    const reducao        = horasAtualAno > 0 ? Math.round((horasRecup / horasAtualAno) * 100) : 0;
-    const horasSemana    = Math.round(horasRecup / 48);
+    const totalAnual  = profs * aval * 2;                 // 2 semestres
+    const horasAtual  = totalAnual * horas;
+    const horasMIIA   = totalAnual * 0.5;                 // 30 min com MIIA
+    const horasRecup  = horasAtual - horasMIIA;
+    const economia    = horasRecup * valorHora;
+    const reducao     = horasAtual > 0 ? Math.round((horasRecup / horasAtual) * 100) : 0;
+    const semana      = Math.round(horasRecup / 48);
 
-    document.getElementById('resEconomia').textContent  = fmtBRL(economia);
-    document.getElementById('resHoras').textContent     = fmt(horasRecup) + 'h';
-    document.getElementById('resHorasSemana').textContent = `por ano · ${fmt(horasSemana)}h/semana`;
+    document.getElementById('resEconomia').textContent     = fmtBRL(economia);
+    document.getElementById('resHoras').textContent        = fmt(horasRecup) + 'h';
+    document.getElementById('resHorasSemana').textContent  = `por ano · ${fmt(semana)}h/semana`;
 
     document.getElementById('detalhes').innerHTML = [
-      ['Avaliações por ano (total)',    fmt(totalProvasAno)],
-      ['Tempo atual por avaliação',     horas + 'h'],
-      ['Tempo com MIIA por avaliação',  '30 min'],
-      ['Redução de tempo',              `${reducao}% · ${fmt(horasRecup)} horas/ano`],
-      ['Hora docente considerada',      fmtBRL(valorHora)],
-    ].map(([l, v]) => `
-      <div class="flex justify-between items-center border-b border-white/5 pb-1.5">
-        <span class="text-blue-300">${l}</span>
-        <span class="text-white font-semibold">${v}</span>
+      ['Avaliações corrigidas por ano',    fmt(totalAnual)],
+      ['Tempo atual por avaliação',        horas + 'h'],
+      ['Tempo com MIIA por avaliação',     '30 min'],
+      ['Redução de tempo',                 `${reducao}% · ${fmt(horasRecup)}h/ano`],
+      ['Hora docente considerada',         fmtBRL(valorHora)],
+    ].map(([l,v]) => `
+      <div class="detail-row">
+        <span class="detail-label">${l}</span>
+        <span class="detail-value">${v}</span>
       </div>
     `).join('');
 
     const msg = encodeURIComponent(
-      `Olá! Usei a calculadora de ROI da MIIA. Resultado estimado: ${fmtBRL(economia)} de economia/ano ` +
-      `e ${fmt(horasRecup)}h recuperadas. Gostaria de ver uma demonstração!`
+      `Olá! Usei a calculadora de ROI da MIIA e o resultado estimado foi de ${fmtBRL(economia)} de economia/ano ` +
+      `e ${fmt(horasRecup)}h recuperadas. Gostaria de saber mais!`
     );
-    document.getElementById('btnWpp').href = `https://wa.me/${WPP_NUMBER}?text=${msg}`;
+    document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
   }
 
   calc();
