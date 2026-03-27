@@ -77,9 +77,8 @@
     .lbl { display:block; font-size:.67rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(28,5,43,.38); margin-bottom:.4rem; }
 
     /* ── Collapse ── */
-    .collapse { display:grid; grid-template-rows:1fr; transition:grid-template-rows .3s ease, opacity .25s ease; opacity:1; }
-    .collapse.shut { grid-template-rows:0fr; opacity:0; }
-    .collapse > div { overflow:hidden; }
+    .collapse { overflow:hidden; max-height:600px; transition:max-height .35s ease, opacity .25s ease; opacity:1; }
+    .collapse.shut { max-height:0; opacity:0; }
 
     /* ── Detail row ── */
     .drow { display:flex; justify-content:space-between; align-items:baseline; padding:.48rem 0; border-bottom:1px solid rgba(128,29,255,.06); font-size:.78rem; }
@@ -192,22 +191,20 @@
           <div class="tgl on" id="tgl-correcao"></div>
         </div>
         <div class="collapse" id="col-correcao">
-          <div>
-            <hr class="divider" />
-            <div style="padding:1.1rem 1.25rem 1.25rem;">
-              <label class="lbl">Redações / provas corrigidas</label>
-              <div style="display:flex;gap:.45rem;align-items:center;">
-                <input type="number" id="correcao_vol" min="1" placeholder="Ex: 500" oninput="calc()" class="inp" />
-                <select class="freq" id="correcao_freq" onchange="calc()">
-                  <option value="1">/ ano</option>
-                  <option value="2" selected>/ semestre</option>
-                  <option value="12">/ mês</option>
-                  <option value="40">/ semana</option>
-                  <option value="200">/ dia</option>
-                </select>
-              </div>
-              <p style="font-size:.68rem;color:rgba(28,5,43,.3);margin-top:.4rem;">Total de provas corrigidas pela instituição no período</p>
+          <hr class="divider" />
+          <div style="padding:1.1rem 1.25rem 1.25rem;">
+            <label class="lbl">Redações / provas corrigidas</label>
+            <div style="display:flex;gap:.45rem;align-items:center;">
+              <input type="number" id="correcao_vol" min="1" placeholder="Ex: 500" oninput="calc()" class="inp" />
+              <select class="freq" id="correcao_freq" onchange="calc()">
+                <option value="1">/ ano</option>
+                <option value="2" selected>/ semestre</option>
+                <option value="12">/ mês</option>
+                <option value="40">/ semana</option>
+                <option value="200">/ dia</option>
+              </select>
             </div>
+            <p style="font-size:.68rem;color:rgba(28,5,43,.3);margin-top:.4rem;">Total de provas corrigidas pela instituição no período</p>
           </div>
         </div>
       </div>
@@ -227,20 +224,18 @@
           <div class="tgl on" id="tgl-geracao"></div>
         </div>
         <div class="collapse" id="col-geracao">
-          <div>
-            <hr class="divider" />
-            <div style="padding:1.1rem 1.25rem 1.25rem;">
-              <label class="lbl">Questões geradas</label>
-              <div style="display:flex;gap:.45rem;align-items:center;">
-                <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 200" oninput="calc()" class="inp" />
-                <select class="freq" id="geracao_freq" onchange="calc()">
-                  <option value="1">/ ano</option>
-                  <option value="2" selected>/ semestre</option>
-                  <option value="12">/ mês</option>
-                  <option value="40">/ semana</option>
-                  <option value="200">/ dia</option>
-                </select>
-              </div>
+          <hr class="divider" />
+          <div style="padding:1.1rem 1.25rem 1.25rem;">
+            <label class="lbl">Questões geradas</label>
+            <div style="display:flex;gap:.45rem;align-items:center;">
+              <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 200" oninput="calc()" class="inp" />
+              <select class="freq" id="geracao_freq" onchange="calc()">
+                <option value="1">/ ano</option>
+                <option value="2" selected>/ semestre</option>
+                <option value="12">/ mês</option>
+                <option value="40">/ semana</option>
+                <option value="200">/ dia</option>
+              </select>
             </div>
           </div>
         </div>
@@ -261,20 +256,18 @@
           <div class="tgl on" id="tgl-diagramacao"></div>
         </div>
         <div class="collapse" id="col-diagramacao">
-          <div>
-            <hr class="divider" />
-            <div style="padding:1.1rem 1.25rem 1.25rem;">
-              <label class="lbl">Provas diagramadas</label>
-              <div style="display:flex;gap:.45rem;align-items:center;">
-                <input type="number" id="diag_provas" min="1" placeholder="Ex: 80" oninput="calc()" class="inp" />
-                <select class="freq" id="diag_freq" onchange="calc()">
-                  <option value="1">/ ano</option>
-                  <option value="2" selected>/ semestre</option>
-                  <option value="12">/ mês</option>
-                  <option value="40">/ semana</option>
-                  <option value="200">/ dia</option>
-                </select>
-              </div>
+          <hr class="divider" />
+          <div style="padding:1.1rem 1.25rem 1.25rem;">
+            <label class="lbl">Provas diagramadas</label>
+            <div style="display:flex;gap:.45rem;align-items:center;">
+              <input type="number" id="diag_provas" min="1" placeholder="Ex: 80" oninput="calc()" class="inp" />
+              <select class="freq" id="diag_freq" onchange="calc()">
+                <option value="1">/ ano</option>
+                <option value="2" selected>/ semestre</option>
+                <option value="12">/ mês</option>
+                <option value="40">/ semana</option>
+                <option value="200">/ dia</option>
+              </select>
             </div>
           </div>
         </div>
