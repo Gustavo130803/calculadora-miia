@@ -5,379 +5,453 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculadora de ROI · MIIA</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
-    :root {
-      --brand-dark:    #1C052B;
-      --brand-purple:  #801DFF;
-      --brand-violet:  #A535FF;
-      --brand-orange:  #F39D60;
-      --brand-cream:   #EEECDF;
-    }
+    body  { font-family: 'Sora', sans-serif; background-color: #f1f5f9; }
+    h1, h2, h3, .font-display { font-family: 'Raleway', sans-serif; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Sora', sans-serif;
-      background-color: var(--brand-dark);
-      min-height: 100vh;
-      color: #fff;
-    }
-    h1, h2, h3, .heading { font-family: 'Raleway', sans-serif; }
-
-    /* Gradient text for MIIA logo */
-    .logo-text {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 900;
-      font-size: 1.5rem;
-      letter-spacing: 0.05em;
-      background: linear-gradient(90deg, #fff 0%, var(--brand-violet) 100%);
+    /* Logo gradient */
+    .logo-gradient {
+      background: linear-gradient(90deg, #fff 0%, #a78bfa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* Cards */
-    .card {
-      background: rgba(128, 29, 255, 0.08);
-      border: 1px solid rgba(165, 53, 255, 0.2);
-      border-radius: 1.25rem;
-      transition: border-color 0.2s;
+    /* Module collapse */
+    .module-body {
+      display: grid;
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.35s ease, opacity 0.3s ease;
+      opacity: 1;
     }
-    .card:hover { border-color: rgba(165, 53, 255, 0.4); }
-
-    /* Main result card */
-    .card-main {
-      background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-violet) 100%);
-      border: none;
-      border-radius: 1.25rem;
+    .module-body.collapsed {
+      grid-template-rows: 0fr;
+      opacity: 0;
     }
+    .module-body > div { overflow: hidden; }
 
-    /* Orange accent card */
-    .card-orange {
-      background: linear-gradient(135deg, #F39D60 0%, #f97316 100%);
-      border: none;
-      border-radius: 1.25rem;
-    }
+    /* Number input clean */
+    input[type=number] { -moz-appearance: textfield; }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
 
-    /* Range input */
-    input[type=range] { accent-color: var(--brand-violet); cursor: pointer; }
+    /* Range track */
+    input[type=range] { accent-color: #2563eb; }
 
-    /* Number input */
-    input[type=number] {
-      background: rgba(128, 29, 255, 0.1);
-      border: 1px solid rgba(165, 53, 255, 0.3);
-      color: #fff;
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem 0.75rem 2.5rem;
-      width: 100%;
-      font-family: 'Sora', sans-serif;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    input[type=number]:focus { border-color: var(--brand-violet); }
-    input[type=number]::-webkit-inner-spin-button { opacity: 0.4; }
-
-    /* Divider line */
-    .divider { border-color: rgba(165, 53, 255, 0.15); }
-
-    /* Value badge */
-    .value-badge {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      color: var(--brand-orange);
-      font-size: 1.1rem;
-      min-width: 2.5rem;
-      text-align: right;
-    }
-
-    /* CTA button */
-    .btn-cta {
-      background: linear-gradient(135deg, var(--brand-purple), var(--brand-violet));
-      color: #fff;
-      font-family: 'Raleway', sans-serif;
-      font-weight: 700;
-      border: none;
-      border-radius: 0.875rem;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
-      text-decoration: none;
-      display: block;
-      text-align: center;
-    }
-    .btn-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-cta:active { transform: scale(0.98); }
-
-    .btn-outline {
-      background: transparent;
-      color: rgba(165, 53, 255, 0.8);
-      font-family: 'Sora', sans-serif;
-      font-weight: 500;
-      border: 1px solid rgba(165, 53, 255, 0.3);
-      border-radius: 0.875rem;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .btn-outline:hover { border-color: var(--brand-violet); color: var(--brand-violet); }
-
-    /* Tag */
-    .tag {
-      display: inline-block;
-      background: rgba(165, 53, 255, 0.15);
-      border: 1px solid rgba(165, 53, 255, 0.3);
-      color: var(--brand-violet);
-      font-family: 'Sora', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.9rem;
-      border-radius: 999px;
-    }
-
-    /* Result number */
-    .result-number {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 900;
-    }
-
-    /* Detail row */
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(165, 53, 255, 0.1);
-      font-size: 0.85rem;
-    }
-    .detail-row:last-child { border-bottom: none; }
-    .detail-label { color: rgba(255,255,255,0.5); font-family: 'Sora', sans-serif; }
-    .detail-value { color: #fff; font-weight: 600; font-family: 'Raleway', sans-serif; }
-
-    /* Stripe subtle */
-    .stripe {
-      background: linear-gradient(90deg, var(--brand-purple), var(--brand-violet));
-      height: 3px;
-      width: 48px;
-      border-radius: 999px;
-    }
+    /* Animated counter */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp 0.25s ease forwards; }
 
     @media print {
       .no-print { display: none !important; }
-      body { background: white !important; color: #111 !important; }
-      .card { background: #f5f0ff !important; border: 1px solid #ddd !important; }
-      .card-main { background: #801DFF !important; }
+      body { background: white !important; }
     }
   </style>
 </head>
-<body>
 
-<div style="max-width:1100px; margin:0 auto; padding:2.5rem 1.25rem 4rem;">
+<body class="min-h-screen">
 
-  <!-- Header -->
-  <header style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3.5rem;" class="no-print">
-    <span class="logo-text">MIIA</span>
-    <span class="tag">Calculadora de ROI</span>
-  </header>
-
-  <!-- Hero text -->
-  <div style="text-align:center; margin-bottom:3rem;" class="no-print">
-    <h1 class="heading" style="font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900; line-height:1.15; margin-bottom:1rem;">
-      Quanto sua instituição está<br/>
-      <span style="background:linear-gradient(90deg,var(--brand-purple),var(--brand-orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
-        perdendo por ano?
-      </span>
-    </h1>
-    <p style="color:rgba(255,255,255,0.5); font-size:1rem; max-width:480px; margin:0 auto; line-height:1.6;">
-      Ajuste os dados abaixo e veja em tempo real o impacto financeiro da MIIA na sua operação acadêmica.
-    </p>
+<!-- ═══════════════════════ TOP BAR ═══════════════════════ -->
+<div class="bg-slate-900 border-b border-slate-700 no-print">
+  <div class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+    <span class="logo-gradient font-display font-black text-xl tracking-widest">MIIA</span>
+    <span class="text-xs font-semibold uppercase tracking-widest text-blue-400 border border-blue-500/30 bg-blue-500/10 px-3 py-1 rounded-full">
+      Calculadora de ROI
+    </span>
   </div>
-
-  <!-- Grid: Inputs + Resultados -->
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;" id="mainGrid">
-
-    <!-- INPUTS -->
-    <div class="card" style="padding:2rem;">
-      <div style="margin-bottom:1.75rem;">
-        <div class="stripe" style="margin-bottom:0.75rem;"></div>
-        <h2 class="heading" style="font-size:1.1rem; font-weight:700; color:#fff;">Dados da Instituição</h2>
-        <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">Mova os controles para ajustar os valores</p>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:1.75rem;">
-
-        <!-- Professores -->
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Professores ativos</label>
-            <span class="value-badge" id="lblProfs">50</span>
-          </div>
-          <input type="range" id="profs" min="5" max="500" step="5" value="50"
-            oninput="syncLabel('profs','lblProfs',''); calc()"
-            style="width:100%; height:4px; border-radius:99px;" />
-          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
-            <span>5</span><span>500</span>
-          </div>
-        </div>
-
-        <!-- Avaliações -->
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Avaliações por professor / semestre</label>
-            <span class="value-badge" id="lblAval">4</span>
-          </div>
-          <input type="range" id="aval" min="1" max="12" step="1" value="4"
-            oninput="syncLabel('aval','lblAval',''); calc()"
-            style="width:100%; height:4px; border-radius:99px;" />
-          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
-            <span>1</span><span>12</span>
-          </div>
-        </div>
-
-        <!-- Horas por prova -->
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <label style="font-size:0.82rem; color:rgba(255,255,255,0.65);">Horas por avaliação hoje</label>
-            <span class="value-badge" id="lblHoras">5h</span>
-          </div>
-          <input type="range" id="horas" min="1" max="12" step="0.5" value="5"
-            oninput="syncLabel('horas','lblHoras','h'); calc()"
-            style="width:100%; height:4px; border-radius:99px;" />
-          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:rgba(255,255,255,0.25); margin-top:0.3rem;">
-            <span>1h</span><span>12h</span>
-          </div>
-          <p style="font-size:0.72rem; color:rgba(255,255,255,0.3); margin-top:0.4rem;">Inclui criação, diagramação e correção manual</p>
-        </div>
-
-        <!-- Valor hora -->
-        <div>
-          <label style="font-size:0.82rem; color:rgba(255,255,255,0.65); display:block; margin-bottom:0.5rem;">
-            Valor médio da hora/aula do docente
-          </label>
-          <div style="position:relative;">
-            <span style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:rgba(165,53,255,0.6); font-size:0.85rem; font-weight:600;">R$</span>
-            <input type="number" id="valorHora" value="150" min="20" step="10" oninput="calc()" />
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- RESULTADOS -->
-    <div style="display:flex; flex-direction:column; gap:1rem;">
-
-      <!-- Card principal: Economia -->
-      <div class="card-main" style="padding:1.75rem;">
-        <p style="font-family:'Sora',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; opacity:0.8; margin-bottom:0.5rem;">
-          Economia Financeira Anual
-        </p>
-        <p id="resEconomia" class="result-number" style="font-size:clamp(2rem,4vw,3rem); line-height:1.1; margin-bottom:0.5rem;">
-          R$ 0
-        </p>
-        <p style="font-size:0.8rem; opacity:0.75;">em custos operacionais com corpo docente</p>
-      </div>
-
-      <!-- Horas + Escala -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-        <div class="card" style="padding:1.5rem;">
-          <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.4rem;">Horas Recuperadas</p>
-          <p id="resHoras" class="result-number" style="font-size:1.8rem; color:#fff;">0h</p>
-          <p id="resHorasSemana" style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">por ano</p>
-        </div>
-        <div class="card" style="padding:1.5rem;">
-          <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.4rem;">Ganho de Escala</p>
-          <p class="result-number" style="font-size:1.8rem; color:#fff;">+22%</p>
-          <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">sem novas contratações</p>
-        </div>
-      </div>
-
-      <!-- Detalhes do cálculo -->
-      <div class="card" style="padding:1.5rem;">
-        <p style="font-size:0.68rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(165,53,255,0.7); margin-bottom:0.75rem;">Como calculamos</p>
-        <div id="detalhes"></div>
-      </div>
-
-      <!-- CTA -->
-      <div class="no-print" style="display:flex; gap:0.75rem;">
-        <a id="btnWpp" href="#" target="_blank" class="btn-cta" style="flex:2;">
-          Falar com especialista MIIA
-        </a>
-        <button onclick="window.print()" class="btn-outline" style="flex:1;">
-          Salvar PDF
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <p class="no-print" style="text-align:center; font-size:0.72rem; color:rgba(255,255,255,0.2); margin-top:3rem; font-family:'Sora',sans-serif;">
-    MIIA · Inteligência Artificial para Educação · Valores são estimativas baseadas nos dados informados.
-  </p>
-
 </div>
 
-<!-- Responsive: empilhar em mobile -->
-<style>
-  @media (max-width: 700px) {
-    #mainGrid { grid-template-columns: 1fr !important; }
-  }
-</style>
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<div class="bg-slate-900 no-print">
+  <div class="max-w-6xl mx-auto px-5 py-10 text-center">
+    <h1 class="font-display font-black text-white text-3xl md:text-4xl leading-tight mb-3">
+      Descubra quanto sua instituição<br class="hidden md:block"/>
+      <span class="text-blue-400">economiza com a MIIA</span>
+    </h1>
+    <p class="text-slate-400 text-sm max-w-lg mx-auto leading-relaxed">
+      Selecione as soluções que deseja simular e configure os dados da sua operação. O cálculo é atualizado em tempo real.
+    </p>
+  </div>
+</div>
 
+<!-- ═══════════════════════ MAIN GRID ═══════════════════════ -->
+<div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+  <!-- ─────────────── LEFT: INPUTS ─────────────── -->
+  <div class="space-y-4">
+
+    <!-- INPUTS GERAIS -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div class="flex items-center gap-2 mb-5">
+        <div class="w-1.5 h-5 rounded-full bg-blue-600"></div>
+        <h2 class="font-display font-bold text-slate-800 text-base">Parâmetros Gerais</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <!-- Valor da hora -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+            Hora/Aula do Docente
+          </label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-semibold">R$</span>
+            <input type="number" id="valorHora" value="150" min="20" step="10" oninput="calc()"
+              class="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+          </div>
+        </div>
+        <!-- Nº de professores -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+            Professores Ativos
+          </label>
+          <input type="number" id="numProfs" value="50" min="1" oninput="calc()"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MÓDULO 1: CORREÇÃO ── -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" id="card-correcao">
+      <!-- Header toggle -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-50 cursor-pointer" onclick="toggleModule('correcao')">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+            <!-- icon: pencil -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-bold text-slate-800 text-sm">Correção de Discursivas / Redações</p>
+            <p class="text-xs text-slate-400 mt-0.5">Economia de <strong>16 min</strong> por correção</p>
+          </div>
+        </div>
+        <!-- Toggle switch -->
+        <label class="relative flex items-center cursor-pointer" onclick="event.stopPropagation()">
+          <input type="checkbox" id="toggle-correcao" class="sr-only peer" checked onchange="toggleModule('correcao')">
+          <div class="w-10 h-5 bg-gray-200 peer-checked:bg-blue-600 rounded-full transition-colors duration-200"></div>
+          <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+        </label>
+      </div>
+      <!-- Body -->
+      <div class="module-body" id="body-correcao">
+        <div>
+          <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                Nº de Alunos
+              </label>
+              <input type="number" id="correcao_alunos" value="600" min="1" oninput="calc()"
+                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                Provas / Ano (por aluno)
+              </label>
+              <input type="number" id="correcao_provas" value="8" min="1" oninput="calc()"
+                class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MÓDULO 2: GERAÇÃO ── -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" id="card-geracao">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-50 cursor-pointer" onclick="toggleModule('geracao')">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-bold text-slate-800 text-sm">Geração de Questões Inéditas</p>
+            <p class="text-xs text-slate-400 mt-0.5">Economia de <strong>27 min</strong> por questão</p>
+          </div>
+        </div>
+        <label class="relative flex items-center cursor-pointer" onclick="event.stopPropagation()">
+          <input type="checkbox" id="toggle-geracao" class="sr-only peer" checked onchange="toggleModule('geracao')">
+          <div class="w-10 h-5 bg-gray-200 peer-checked:bg-blue-600 rounded-full transition-colors duration-200"></div>
+          <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+        </label>
+      </div>
+      <div class="module-body" id="body-geracao">
+        <div>
+          <div class="px-6 py-5">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+              Total de Questões Geradas / Ano
+            </label>
+            <input type="number" id="geracao_questoes" value="1200" min="1" oninput="calc()"
+              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MÓDULO 3: DIAGRAMAÇÃO ── -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" id="card-diagramacao">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-50 cursor-pointer" onclick="toggleModule('diagramacao')">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-bold text-slate-800 text-sm">Diagramação Automática de Provas</p>
+            <p class="text-xs text-slate-400 mt-0.5">Economia de <strong>43 min</strong> por prova</p>
+          </div>
+        </div>
+        <label class="relative flex items-center cursor-pointer" onclick="event.stopPropagation()">
+          <input type="checkbox" id="toggle-diagramacao" class="sr-only peer" checked onchange="toggleModule('diagramacao')">
+          <div class="w-10 h-5 bg-gray-200 peer-checked:bg-blue-600 rounded-full transition-colors duration-200"></div>
+          <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+        </label>
+      </div>
+      <div class="module-body" id="body-diagramacao">
+        <div>
+          <div class="px-6 py-5">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+              Total de Provas Diagramadas / Ano
+            </label>
+            <input type="number" id="diag_provas" value="400" min="1" oninput="calc()"
+              class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /LEFT -->
+
+  <!-- ─────────────── RIGHT: RESULTS DASHBOARD ─────────────── -->
+  <div class="bg-slate-900 rounded-2xl shadow-xl p-6 space-y-4 lg:sticky lg:top-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-1">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">Resultado da Simulação</p>
+        <h2 class="font-display font-black text-white text-lg mt-0.5">Dashboard de ROI</h2>
+      </div>
+      <div id="activeCount" class="text-xs font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-full">
+        3 módulos ativos
+      </div>
+    </div>
+
+    <!-- Total economy — hero card -->
+    <div class="bg-blue-600 rounded-xl p-5">
+      <p class="text-blue-100 text-xs font-semibold uppercase tracking-wider">Economia Financeira Total / Ano</p>
+      <p id="resTotal" class="font-display font-black text-white text-4xl mt-1.5 leading-none">R$ 0</p>
+      <p class="text-blue-200 text-xs mt-2">em custos operacionais com corpo docente</p>
+    </div>
+
+    <!-- Horas + Escala -->
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700">
+        <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Horas Recuperadas</p>
+        <p id="resHoras" class="font-display font-black text-white text-2xl">0h</p>
+        <p id="resHorasSem" class="text-slate-500 text-xs mt-1">por ano</p>
+      </div>
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700">
+        <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Ganho de Escala</p>
+        <p class="font-display font-black text-white text-2xl">+22%</p>
+        <p class="text-slate-500 text-xs mt-1">sem novas contratações</p>
+      </div>
+    </div>
+
+    <!-- Per-module breakdown -->
+    <div class="space-y-2">
+      <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 pt-1">Por Módulo</p>
+
+      <!-- Correção -->
+      <div id="row-correcao" class="flex items-center justify-between bg-slate-800 rounded-xl px-4 py-3 border border-slate-700 transition-opacity duration-300">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0"></div>
+          <span class="text-slate-300 text-xs font-medium">Correção de Discursivas</span>
+        </div>
+        <div class="text-right">
+          <p id="mod-correcao-eco" class="text-white text-sm font-semibold font-display">R$ 0</p>
+          <p id="mod-correcao-h" class="text-slate-500 text-xs">0h</p>
+        </div>
+      </div>
+
+      <!-- Geração -->
+      <div id="row-geracao" class="flex items-center justify-between bg-slate-800 rounded-xl px-4 py-3 border border-slate-700 transition-opacity duration-300">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full bg-violet-400 flex-shrink-0"></div>
+          <span class="text-slate-300 text-xs font-medium">Geração de Questões</span>
+        </div>
+        <div class="text-right">
+          <p id="mod-geracao-eco" class="text-white text-sm font-semibold font-display">R$ 0</p>
+          <p id="mod-geracao-h" class="text-slate-500 text-xs">0h</p>
+        </div>
+      </div>
+
+      <!-- Diagramação -->
+      <div id="row-diagramacao" class="flex items-center justify-between bg-slate-800 rounded-xl px-4 py-3 border border-slate-700 transition-opacity duration-300">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0"></div>
+          <span class="text-slate-300 text-xs font-medium">Diagramação de Provas</span>
+        </div>
+        <div class="text-right">
+          <p id="mod-diag-eco" class="text-white text-sm font-semibold font-display">R$ 0</p>
+          <p id="mod-diag-h" class="text-slate-500 text-xs">0h</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="border-t border-slate-700 pt-3">
+      <p class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3">Detalhamento</p>
+      <div id="detalhes" class="space-y-1.5 text-xs"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="pt-2 space-y-2 no-print">
+      <a id="btnWpp" href="#" target="_blank"
+        class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-display font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/20">
+        <!-- WhatsApp icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.134.559 4.133 1.535 5.867L.057 23.428a.5.5 0 00.619.62l5.64-1.488A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.55 9.55 0 01-4.943-1.37l-.355-.21-3.666.968.981-3.574-.231-.367A9.554 9.554 0 012.4 12C2.4 6.698 6.698 2.4 12 2.4S21.6 6.698 21.6 12 17.302 21.6 12 21.6z"/>
+        </svg>
+        Falar com especialista MIIA
+      </a>
+      <button onclick="window.print()"
+        class="w-full border border-slate-600 text-slate-400 hover:text-white hover:border-slate-400 text-xs font-medium py-2.5 rounded-xl transition-colors">
+        Exportar como PDF
+      </button>
+    </div>
+
+    <p class="text-slate-600 text-xs text-center pt-1">
+      Estimativa baseada nos dados informados · MIIA © 2025
+    </p>
+  </div><!-- /RIGHT -->
+
+</div><!-- /GRID -->
+
+<!-- ═══════════════════════ SCRIPT ═══════════════════════ -->
 <script>
-  const WPP = '5511999999999'; // ← substitua pelo número real da MIIA
+  const WPP = '5511999999999'; // ← substitua pelo número real
 
-  function syncLabel(inputId, labelId, suffix) {
-    document.getElementById(labelId).textContent = document.getElementById(inputId).value + suffix;
+  // ── Estado ──────────────────────────────────────
+  const state = { correcao: true, geracao: true, diagramacao: true };
+
+  // ── Toggle módulo ────────────────────────────────
+  function toggleModule(mod) {
+    state[mod] = document.getElementById(`toggle-${mod}`).checked;
+    const body = document.getElementById(`body-${mod}`);
+    const row  = document.getElementById(`row-${mod}`);
+    body.classList.toggle('collapsed', !state[mod]);
+    row.style.opacity = state[mod] ? '1' : '0.35';
+    calc();
   }
 
+  // ── Formatação ───────────────────────────────────
   function fmt(n) { return Math.round(n).toLocaleString('pt-BR'); }
   function fmtBRL(n) {
-    return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL', minimumFractionDigits:0 });
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 });
   }
+  function set(id, val) { document.getElementById(id).textContent = val; }
 
+  // ── Cálculo principal ────────────────────────────
   function calc() {
-    const profs     = parseFloat(document.getElementById('profs').value)     || 0;
-    const aval      = parseFloat(document.getElementById('aval').value)      || 0;
-    const horas     = parseFloat(document.getElementById('horas').value)     || 0;
     const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
+    const numProfs  = parseFloat(document.getElementById('numProfs').value)  || 0;
 
-    const totalAnual  = profs * aval * 2;                 // 2 semestres
-    const horasAtual  = totalAnual * horas;
-    const horasMIIA   = totalAnual * 0.5;                 // 30 min com MIIA
-    const horasRecup  = horasAtual - horasMIIA;
-    const economia    = horasRecup * valorHora;
-    const reducao     = horasAtual > 0 ? Math.round((horasRecup / horasAtual) * 100) : 0;
-    const semana      = Math.round(horasRecup / 48);
+    // Módulo 1 — Correção
+    let hCorrecao = 0, eCorrecao = 0;
+    if (state.correcao) {
+      const alunos = parseFloat(document.getElementById('correcao_alunos').value) || 0;
+      const provas = parseFloat(document.getElementById('correcao_provas').value) || 0;
+      const totalPapeis = alunos * provas;
+      hCorrecao = totalPapeis * (16 / 60);
+      eCorrecao = hCorrecao * valorHora;
+    }
 
-    document.getElementById('resEconomia').textContent     = fmtBRL(economia);
-    document.getElementById('resHoras').textContent        = fmt(horasRecup) + 'h';
-    document.getElementById('resHorasSemana').textContent  = `por ano · ${fmt(semana)}h/semana`;
+    // Módulo 2 — Geração
+    let hGeracao = 0, eGeracao = 0;
+    if (state.geracao) {
+      const questoes = parseFloat(document.getElementById('geracao_questoes').value) || 0;
+      hGeracao = questoes * (27 / 60);
+      eGeracao = hGeracao * valorHora;
+    }
 
-    document.getElementById('detalhes').innerHTML = [
-      ['Avaliações corrigidas por ano',    fmt(totalAnual)],
-      ['Tempo atual por avaliação',        horas + 'h'],
-      ['Tempo com MIIA por avaliação',     '30 min'],
-      ['Redução de tempo',                 `${reducao}% · ${fmt(horasRecup)}h/ano`],
-      ['Hora docente considerada',         fmtBRL(valorHora)],
-    ].map(([l,v]) => `
-      <div class="detail-row">
-        <span class="detail-label">${l}</span>
-        <span class="detail-value">${v}</span>
+    // Módulo 3 — Diagramação
+    let hDiag = 0, eDiag = 0;
+    if (state.diagramacao) {
+      const provasDiag = parseFloat(document.getElementById('diag_provas').value) || 0;
+      hDiag = provasDiag * (43 / 60);
+      eDiag = hDiag * valorHora;
+    }
+
+    // Totais
+    const totalH   = hCorrecao + hGeracao + hDiag;
+    const totalEco = eCorrecao + eGeracao + eDiag;
+    const semana   = Math.round(totalH / 48);
+
+    // ── Atualizar UI ──
+    set('resTotal',       fmtBRL(totalEco));
+    set('resHoras',       fmt(totalH) + 'h');
+    set('resHorasSem',    `por ano · ${fmt(semana)}h/semana`);
+
+    set('mod-correcao-eco', fmtBRL(eCorrecao));
+    set('mod-correcao-h',   fmt(hCorrecao) + 'h');
+    set('mod-geracao-eco',  fmtBRL(eGeracao));
+    set('mod-geracao-h',    fmt(hGeracao) + 'h');
+    set('mod-diag-eco',     fmtBRL(eDiag));
+    set('mod-diag-h',       fmt(hDiag) + 'h');
+
+    // Contagem de módulos ativos
+    const ativos = [state.correcao, state.geracao, state.diagramacao].filter(Boolean).length;
+    set('activeCount', `${ativos} módulo${ativos !== 1 ? 's' : ''} ativo${ativos !== 1 ? 's' : ''}`);
+
+    // Detalhes
+    const rows = [];
+    if (state.correcao) {
+      const a = document.getElementById('correcao_alunos').value;
+      const p = document.getElementById('correcao_provas').value;
+      rows.push(
+        ['Correção · total de provas/ano', fmt(a * p)],
+        ['Correção · tempo economizado', `${fmt(hCorrecao)}h (16 min/prova)`],
+      );
+    }
+    if (state.geracao) {
+      const q = document.getElementById('geracao_questoes').value;
+      rows.push(
+        ['Geração · questões/ano', fmt(q)],
+        ['Geração · tempo economizado', `${fmt(hGeracao)}h (27 min/questão)`],
+      );
+    }
+    if (state.diagramacao) {
+      const d = document.getElementById('diag_provas').value;
+      rows.push(
+        ['Diagramação · provas/ano', fmt(d)],
+        ['Diagramação · tempo economizado', `${fmt(hDiag)}h (43 min/prova)`],
+      );
+    }
+    rows.push(['Hora docente considerada', fmtBRL(valorHora)]);
+
+    document.getElementById('detalhes').innerHTML = rows.map(([l, v]) => `
+      <div class="flex justify-between items-center py-1 border-b border-slate-800">
+        <span class="text-slate-500">${l}</span>
+        <span class="text-slate-300 font-medium font-display">${v}</span>
       </div>
     `).join('');
 
+    // WhatsApp CTA
     const msg = encodeURIComponent(
-      `Olá! Usei a calculadora de ROI da MIIA e o resultado estimado foi de ${fmtBRL(economia)} de economia/ano ` +
-      `e ${fmt(horasRecup)}h recuperadas. Gostaria de saber mais!`
+      `Olá! Simulei o ROI da MIIA e o resultado foi ${fmtBRL(totalEco)} de economia/ano ` +
+      `com ${fmt(totalH)}h recuperadas. Gostaria de saber mais!`
     );
     document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
   }
 
+  // Init
   calc();
 </script>
+
 </body>
 </html>
