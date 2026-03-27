@@ -107,53 +107,49 @@
       .main-grid { grid-template-columns:1fr !important; }
     }
 
-    @page { size: A4 portrait; margin: 1.2cm 1.5cm; }
+    /* ── Email CTA ── */
+    .cta-email {
+      display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%;
+      background:#fff; color:var(--p);
+      font-family:'Raleway',sans-serif; font-weight:800; font-size:.92rem;
+      border:1.5px solid rgba(128,29,255,.3); border-radius:1rem; padding:.95rem;
+      cursor:pointer; text-decoration:none; transition:all .2s;
+    }
+    .cta-email:hover { background:rgba(128,29,255,.06); border-color:var(--p); }
+
+    @page { size: A4 portrait; margin: 1.5cm; }
 
     @media print {
-      /* Forçar cores MIIA */
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-      body { background: var(--bg) !important; font-size: 85%; }
-      body > div { max-width: 100% !important; padding: 0 !important; }
+      body { background: var(--bg) !important; }
+      body > div { max-width:100% !important; padding:0 !important; }
 
-      /* Mostrar / ocultar */
+      /* Ocultar interativos e coluna de inputs */
       .no-print { display:none !important; }
       .tgl { display:none !important; }
       .freq { display:none !important; }
+      .inputs-col { display:none !important; }
+
+      /* Mostrar print-only */
       .print-only { display:block !important; }
+      .print-header { display:flex !important; align-items:center; justify-content:space-between; padding-bottom:.8rem; margin-bottom:1.25rem; border-bottom:2.5px solid var(--p); page-break-inside:avoid; break-inside:avoid; }
 
-      /* Título de impressão */
-      .print-header {
-        display:flex !important;
-        align-items:center;
-        justify-content:space-between;
-        padding-bottom:.75rem;
-        margin-bottom:1rem;
-        border-bottom:2.5px solid var(--p);
-        page-break-inside:avoid; break-inside:avoid;
-      }
+      /* Resultados ocupam toda a largura */
+      .main-grid { display:block !important; }
+      .results-col { position:static !important; width:100% !important; display:flex !important; flex-direction:column !important; gap:.85rem !important; }
 
-      /* Layout single-column */
-      .main-grid { grid-template-columns: 1fr !important; gap: .75rem !important; }
-      .metrics-row { gap: .6rem !important; }
+      /* Métricas em linha horizontal */
+      .metrics-row { display:flex !important; flex-wrap:nowrap !important; gap:.75rem !important; margin-bottom:1.25rem !important; }
+      .card-grad { flex:1.3 !important; }
+      .metrics-row .card { flex:1 !important; }
 
-      /* Compactar cards */
-      .card, .card-grad { padding: 1rem 1.1rem !important; }
-      .mod-card { margin-bottom:.5rem !important; }
-
-      /* Nunca quebrar no meio de um card */
-      .card, .card-grad, .mod-card, .metrics-row,
+      /* Cards compactos, sem quebrar internamente */
+      .card, .card-grad { padding:1rem 1.2rem !important; border-radius:1rem !important; page-break-inside:avoid; break-inside:avoid; }
       .drow { page-break-inside:avoid; break-inside:avoid; }
 
-      /* Resultados começam numa nova página */
-      .results-col { page-break-before:always; break-before:always; }
-      .results-col > div { position:static !important; }
-
-      /* Inputs legíveis */
-      .inp { background:#EDE6FA !important; border-color:rgba(128,29,255,.35) !important; padding:.4rem .7rem !important; }
-
-      /* Textos menores nos módulos */
-      .mod-card .lbl { font-size:.6rem !important; }
+      /* Sem quebra desnecessária */
+      .results-col > * { page-break-inside:avoid; break-inside:avoid; }
     }
   </style>
 </head>
@@ -220,7 +216,7 @@
   <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start;">
 
     <!-- ─── LEFT ─── -->
-    <div style="display:flex; flex-direction:column; gap:1rem;">
+    <div class="inputs-col" style="display:flex; flex-direction:column; gap:1rem;">
 
       <!-- Parâmetros gerais -->
       <div class="card" style="padding:1.5rem;">
@@ -385,6 +381,8 @@
 
       <!-- CTA -->
       <div class="no-print" style="display:flex;flex-direction:column;gap:.75rem;padding-top:.25rem;">
+
+        <!-- WhatsApp -->
         <a id="btnWpp" href="#" target="_blank" class="cta">
           <svg style="width:1.05rem;height:1.05rem;flex-shrink:0;" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -392,6 +390,16 @@
           </svg>
           Falar com especialista MIIA
         </a>
+
+        <!-- Email -->
+        <a id="btnEmail" href="#" class="cta-email">
+          <svg style="width:1.05rem;height:1.05rem;flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+          </svg>
+          Enviar por e-mail
+        </a>
+
+        <!-- PDF -->
         <button onclick="window.print()" style="background:transparent;border:1.5px solid rgba(128,29,255,.13);color:rgba(28,5,43,.35);font-family:'Sora',sans-serif;font-size:.75rem;border-radius:.875rem;padding:.65rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(128,29,255,.3)';this.style.color='var(--p)'" onmouseout="this.style.borderColor='rgba(128,29,255,.13)';this.style.color='rgba(28,5,43,.35)'">
           Exportar como PDF
         </button>
@@ -402,8 +410,9 @@
 </div>
 
 <script>
-  const WPP  = '5511999999999';
-  const mods = { correcao:true, geracao:true, diagramacao:true };
+  const WPP   = '5511999999999';
+  const EMAIL = 'contato@miia.tech';
+  const mods  = { correcao:true, geracao:true, diagramacao:true };
 
   function toggleMod(m) {
     mods[m] = !mods[m];
@@ -491,6 +500,10 @@
     if (tH>0 && ok) {
       const msg = encodeURIComponent(`Olá! Simulei o ROI da MIIA: ${fmtBRL(tE)} de economia/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
       document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
+
+      const subject = encodeURIComponent(`ROI MIIA: ${fmtBRL(tE)} de economia estimada`);
+      const body = encodeURIComponent(`Olá,\n\nSimulei o ROI da MIIA para minha instituição:\n\n• Economia financeira/ano: ${fmtBRL(tE)}\n• Horas recuperadas/ano: ${fmt(tH)}h\n• Eficiência ganha: +22%\n\nGostaria de saber mais sobre as soluções MIIA.\n\nAtt.`);
+      document.getElementById('btnEmail').href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
     }
   }
 
