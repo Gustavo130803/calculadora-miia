@@ -380,9 +380,9 @@
       </div>
 
       <!-- CTA -->
-      <div class="no-print" style="display:flex;flex-direction:column;gap:.75rem;padding-top:.25rem;">
+      <div class="no-print" style="display:flex;flex-direction:column;gap:.65rem;padding-top:.25rem;">
 
-        <!-- WhatsApp -->
+        <!-- Falar com especialista (WhatsApp) -->
         <a id="btnWpp" href="#" target="_blank" class="cta">
           <svg style="width:1.05rem;height:1.05rem;flex-shrink:0;" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -391,16 +391,36 @@
           Falar com especialista MIIA
         </a>
 
-        <!-- Email -->
-        <a id="btnEmail" href="#" class="cta-email">
-          <svg style="width:1.05rem;height:1.05rem;flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
-          </svg>
-          Enviar por e-mail
-        </a>
+        <!-- Separador compartilhar -->
+        <p style="font-size:.67rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(28,5,43,.3);text-align:center;margin:.1rem 0 0;">Compartilhar resultado</p>
 
-        <!-- PDF -->
-        <button onclick="window.print()" style="background:transparent;border:1.5px solid rgba(128,29,255,.13);color:rgba(28,5,43,.35);font-family:'Sora',sans-serif;font-size:.75rem;border-radius:.875rem;padding:.65rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(128,29,255,.3)';this.style.color='var(--p)'" onmouseout="this.style.borderColor='rgba(128,29,255,.13)';this.style.color='rgba(28,5,43,.35)'">
+        <!-- Linha: Compartilhar Wpp + Email -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+          <button onclick="shareWpp()" class="cta-email" style="padding:.8rem .5rem;font-size:.78rem;gap:.35rem;">
+            <svg style="width:.95rem;height:.95rem;flex-shrink:0;" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.134.559 4.133 1.535 5.867L.057 23.428a.5.5 0 00.619.62l5.64-1.488A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.55 9.55 0 01-4.943-1.37l-.355-.21-3.666.968.981-3.574-.231-.367A9.554 9.554 0 012.4 12C2.4 6.698 6.698 2.4 12 2.4S21.6 6.698 21.6 12 17.302 21.6 12 21.6z"/>
+            </svg>
+            WhatsApp
+          </button>
+          <button onclick="shareEmail()" class="cta-email" style="padding:.8rem .5rem;font-size:.78rem;gap:.35rem;">
+            <svg style="width:.95rem;height:.95rem;flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+            </svg>
+            E-mail
+          </button>
+        </div>
+
+        <!-- Copiar link -->
+        <button id="btnCopyLink" onclick="copyLink()" style="background:transparent;border:1.5px solid rgba(128,29,255,.13);color:rgba(28,5,43,.4);font-family:'Sora',sans-serif;font-size:.73rem;border-radius:.875rem;padding:.6rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem;" onmouseover="this.style.borderColor='rgba(128,29,255,.3)';this.style.color='var(--p)'" onmouseout="this.style.borderColor='rgba(128,29,255,.13)';this.style.color='rgba(28,5,43,.4)'">
+          <svg style="width:.85rem;height:.85rem;" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/>
+          </svg>
+          Copiar link do resultado
+        </button>
+
+        <!-- Exportar PDF -->
+        <button onclick="window.print()" style="background:transparent;border:1.5px solid rgba(128,29,255,.13);color:rgba(28,5,43,.35);font-family:'Sora',sans-serif;font-size:.73rem;border-radius:.875rem;padding:.6rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(128,29,255,.3)';this.style.color='var(--p)'" onmouseout="this.style.borderColor='rgba(128,29,255,.13)';this.style.color='rgba(28,5,43,.35)'">
           Exportar como PDF
         </button>
       </div>
@@ -498,15 +518,72 @@
       : '<p style="font-size:.78rem;color:rgba(28,5,43,.22);text-align:center;padding:.5rem 0;">Preencha os campos para ver o resultado</p>';
 
     if (tH>0 && ok) {
-      const msg = encodeURIComponent(`Olá! Simulei o ROI da MIIA: ${fmtBRL(tE)} de economia/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
+      const msg = encodeURIComponent(`Olá! Calculei o ROI da MIIA: ${fmtBRL(tE)} de economia/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
       document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
-
-      const subject = encodeURIComponent(`ROI MIIA: ${fmtBRL(tE)} de economia estimada`);
-      const body = encodeURIComponent(`Olá,\n\nSimulei o ROI da MIIA para minha instituição:\n\n• Economia financeira/ano: ${fmtBRL(tE)}\n• Horas recuperadas/ano: ${fmt(tH)}h\n• Eficiência ganha: +22%\n\nGostaria de saber mais sobre as soluções MIIA.\n\nAtt.`);
-      document.getElementById('btnEmail').href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
     }
   }
 
+  // ── URL compartilhável ──
+  function buildShareURL() {
+    const p = new URLSearchParams();
+    const ids = ['valorHora','correcao_vol','correcao_freq','geracao_questoes','geracao_freq','diag_provas','diag_freq'];
+    ids.forEach(id => { const v = document.getElementById(id).value; if (v) p.set(id, v); });
+    p.set('mc', mods.correcao  ? '1':'0');
+    p.set('mg', mods.geracao   ? '1':'0');
+    p.set('md', mods.diagramacao ? '1':'0');
+    return location.origin + location.pathname + '?' + p.toString();
+  }
+
+  function resultSummary() {
+    const eco  = document.getElementById('resTotal').textContent;
+    const horas = document.getElementById('resHoras').textContent;
+    if (eco === '—') return null;
+    return { eco, horas };
+  }
+
+  function shareWpp() {
+    const s = resultSummary();
+    const url = buildShareURL();
+    const txt = s
+      ? `Calculei o ROI da MIIA para minha instituição:\n• Economia: ${s.eco}/ano\n• Horas recuperadas: ${s.horas}/ano\n\nVeja o resultado completo: ${url}`
+      : `Calculadora de ROI MIIA: ${url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
+  }
+
+  function shareEmail() {
+    const s = resultSummary();
+    const url = buildShareURL();
+    const subject = encodeURIComponent(s ? `ROI MIIA — ${s.eco} de economia estimada` : 'Calculadora de ROI MIIA');
+    const body = encodeURIComponent(
+      s ? `Olá,\n\nSimulei o ROI da MIIA para minha instituição:\n\n• Economia financeira/ano: ${s.eco}\n• Horas recuperadas/ano: ${s.horas}\n• Eficiência ganha: +22%\n\nVeja o cálculo completo: ${url}\n\nAtt.`
+        : `Acesse a Calculadora de ROI MIIA: ${url}`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }
+
+  function copyLink() {
+    const url = buildShareURL();
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('btnCopyLink');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ Link copiado!';
+      btn.style.color = 'var(--p)';
+      btn.style.borderColor = 'rgba(128,29,255,.3)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.color=''; btn.style.borderColor=''; }, 2000);
+    });
+  }
+
+  // ── Carregar params da URL (link compartilhado) ──
+  function loadFromURL() {
+    const p = new URLSearchParams(location.search);
+    const ids = ['valorHora','correcao_vol','correcao_freq','geracao_questoes','geracao_freq','diag_provas','diag_freq'];
+    ids.forEach(id => { if (p.get(id)) document.getElementById(id).value = p.get(id); });
+    if (p.get('mc') === '0') toggleMod('correcao');
+    if (p.get('mg') === '0') toggleMod('geracao');
+    if (p.get('md') === '0') toggleMod('diagramacao');
+  }
+
+  loadFromURL();
   calc();
 
   // Data no header do PDF
