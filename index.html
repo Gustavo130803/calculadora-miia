@@ -99,51 +99,80 @@
     /* ── Divider ── */
     .divider { border:none; border-top:1px solid rgba(128,29,255,.07); margin:.1rem 0; }
 
+    /* ── Print-only header ── */
+    .print-only { display:none; }
+
     @media (max-width:767px) {
       .metrics-row { flex-direction:column; }
       .main-grid { grid-template-columns:1fr !important; }
     }
+
+    @page { size: A4 portrait; margin: 1.2cm 1.5cm; }
+
     @media print {
-      /* ── Forçar cores exatas da MIIA no PDF ── */
+      /* Forçar cores MIIA */
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-      body { background: var(--bg) !important; }
+      body { background: var(--bg) !important; font-size: 85%; }
+      body > div { max-width: 100% !important; padding: 0 !important; }
 
-      /* ── Esconder elementos de interação ── */
+      /* Mostrar / ocultar */
       .no-print { display:none !important; }
       .tgl { display:none !important; }
       .freq { display:none !important; }
+      .print-only { display:block !important; }
 
-      /* ── Layout single-column no PDF ── */
-      .main-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
-      .metrics-row { flex-wrap: wrap; gap: .75rem !important; }
+      /* Título de impressão */
+      .print-header {
+        display:flex !important;
+        align-items:center;
+        justify-content:space-between;
+        padding-bottom:.75rem;
+        margin-bottom:1rem;
+        border-bottom:2.5px solid var(--p);
+        page-break-inside:avoid; break-inside:avoid;
+      }
 
-      /* ── Evitar quebra no meio dos cards ── */
-      .card, .card-grad, .mod-card { page-break-inside: avoid; break-inside: avoid; }
-      .metrics-row { page-break-inside: avoid; break-inside: avoid; }
+      /* Layout single-column */
+      .main-grid { grid-template-columns: 1fr !important; gap: .75rem !important; }
+      .metrics-row { gap: .6rem !important; }
 
-      /* ── Quebra de página inteligente ── */
-      /* Coluna direita (resultados) começa numa nova página */
-      .main-grid > div:last-child { page-break-before: always; break-before: always; }
+      /* Compactar cards */
+      .card, .card-grad { padding: 1rem 1.1rem !important; }
+      .mod-card { margin-bottom:.5rem !important; }
 
-      /* Módulos individuais não quebram */
-      .mod-card { page-break-inside: avoid; break-inside: avoid; margin-bottom: .75rem; }
+      /* Nunca quebrar no meio de um card */
+      .card, .card-grad, .mod-card, .metrics-row,
+      .drow { page-break-inside:avoid; break-inside:avoid; }
 
-      /* ── Remover position:sticky no PDF ── */
-      .main-grid > div:last-child > div { position: static !important; }
+      /* Resultados começam numa nova página */
+      .results-col { page-break-before:always; break-before:always; }
+      .results-col > div { position:static !important; }
 
-      /* ── Inputs legíveis no PDF ── */
-      .inp { background: #F0EAFF !important; border-color: rgba(128,29,255,.3) !important; color: var(--txt) !important; }
+      /* Inputs legíveis */
+      .inp { background:#EDE6FA !important; border-color:rgba(128,29,255,.35) !important; padding:.4rem .7rem !important; }
 
-      /* ── Ajustar padding geral ── */
-      body > div { padding: 1.5rem !important; }
+      /* Textos menores nos módulos */
+      .mod-card .lbl { font-size:.6rem !important; }
     }
   </style>
 </head>
 <body>
 <div style="max-width:1080px; margin:0 auto; padding:2.5rem 1.5rem 5rem;">
 
-  <!-- ═══ HEADER ═══ -->
+  <!-- ═══ HEADER IMPRESSÃO (só aparece no PDF) ═══ -->
+  <div class="print-only print-header">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span class="f-display" style="font-size:2.2rem;font-weight:900;color:var(--p);letter-spacing:.04em;">MIIA</span>
+      <div style="border-left:2px solid rgba(128,29,255,.2);padding-left:1rem;">
+        <p class="f-display" style="font-size:1.1rem;font-weight:800;color:var(--p);line-height:1.1;">Calculadora de ROI</p>
+        <p style="font-size:.72rem;color:rgba(28,5,43,.4);margin-top:.15rem;">Estimativa de economia com soluções MIIA</p>
+      </div>
+    </div>
+    <p id="printDate" style="font-size:.72rem;color:rgba(28,5,43,.35);text-align:right;"></p>
+  </div>
+
+  <!-- ═══ HEADER WEB ═══ -->
   <header class="no-print" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem;">
     <span class="f-display" style="font-size:1.6rem; font-weight:900; color:var(--p); letter-spacing:.04em;">MIIA</span>
     <span style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--p); background:rgba(128,29,255,.08); border:1px solid rgba(128,29,255,.15); padding:.3rem .9rem; border-radius:9999px;">
@@ -153,8 +182,8 @@
 
   <!-- ═══ HERO ═══ -->
   <div class="no-print" style="text-align:center; margin-bottom:2.75rem;">
-    <h1 class="f-display" style="font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:900; line-height:1.15; color:var(--txt); margin-bottom:.75rem;">
-      Quanto a MIIA economiza<br/>
+    <h1 class="f-display" style="font-size:clamp(2rem,4vw,3rem); font-weight:900; line-height:1.1; margin-bottom:.75rem;">
+      Quanto a <span style="color:var(--p);">MIIA</span> economiza<br/>
       <span style="background:linear-gradient(90deg,var(--p),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
         para a sua instituição?
       </span>
@@ -306,7 +335,7 @@
     </div><!-- /LEFT -->
 
     <!-- ─── RIGHT ─── -->
-    <div style="display:flex;flex-direction:column;gap:1rem;position:sticky;top:1.5rem;">
+    <div class="results-col" style="display:flex;flex-direction:column;gap:1rem;position:sticky;top:1.5rem;">
 
       <!-- Por módulo -->
       <div class="card" style="padding:1.5rem;">
@@ -466,6 +495,11 @@
   }
 
   calc();
+
+  // Data no header do PDF
+  const d = new Date();
+  document.getElementById('printDate').textContent =
+    d.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
 </script>
 </body>
 </html>
