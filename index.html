@@ -104,8 +104,39 @@
       .main-grid { grid-template-columns:1fr !important; }
     }
     @media print {
+      /* ── Forçar cores exatas da MIIA no PDF ── */
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      body { background: var(--bg) !important; }
+
+      /* ── Esconder elementos de interação ── */
       .no-print { display:none !important; }
-      body { background:#fff !important; }
+      .tgl { display:none !important; }
+      .freq { display:none !important; }
+
+      /* ── Layout single-column no PDF ── */
+      .main-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+      .metrics-row { flex-wrap: wrap; gap: .75rem !important; }
+
+      /* ── Evitar quebra no meio dos cards ── */
+      .card, .card-grad, .mod-card { page-break-inside: avoid; break-inside: avoid; }
+      .metrics-row { page-break-inside: avoid; break-inside: avoid; }
+
+      /* ── Quebra de página inteligente ── */
+      /* Coluna direita (resultados) começa numa nova página */
+      .main-grid > div:last-child { page-break-before: always; break-before: always; }
+
+      /* Módulos individuais não quebram */
+      .mod-card { page-break-inside: avoid; break-inside: avoid; margin-bottom: .75rem; }
+
+      /* ── Remover position:sticky no PDF ── */
+      .main-grid > div:last-child > div { position: static !important; }
+
+      /* ── Inputs legíveis no PDF ── */
+      .inp { background: #F0EAFF !important; border-color: rgba(128,29,255,.3) !important; color: var(--txt) !important; }
+
+      /* ── Ajustar padding geral ── */
+      body > div { padding: 1.5rem !important; }
     }
   </style>
 </head>
