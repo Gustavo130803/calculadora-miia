@@ -77,8 +77,7 @@
     .lbl { display:block; font-size:.67rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(28,5,43,.38); margin-bottom:.4rem; }
 
     /* ── Collapse ── */
-    .collapse { overflow:hidden; max-height:600px; transition:max-height .35s ease, opacity .25s ease; opacity:1; }
-    .collapse.shut { max-height:0; opacity:0; }
+    .mod-body { display:block; }
 
     /* ── Detail row ── */
     .drow { display:flex; justify-content:space-between; align-items:baseline; padding:.48rem 0; border-bottom:1px solid rgba(128,29,255,.06); font-size:.78rem; }
@@ -190,7 +189,7 @@
           </div>
           <div class="tgl on" id="tgl-correcao"></div>
         </div>
-        <div class="collapse" id="col-correcao">
+        <div class="mod-body" id="col-correcao">
           <hr class="divider" />
           <div style="padding:1.1rem 1.25rem 1.25rem;">
             <label class="lbl">Redações / provas corrigidas</label>
@@ -223,7 +222,7 @@
           </div>
           <div class="tgl on" id="tgl-geracao"></div>
         </div>
-        <div class="collapse" id="col-geracao">
+        <div class="mod-body" id="col-geracao">
           <hr class="divider" />
           <div style="padding:1.1rem 1.25rem 1.25rem;">
             <label class="lbl">Questões geradas</label>
@@ -255,7 +254,7 @@
           </div>
           <div class="tgl on" id="tgl-diagramacao"></div>
         </div>
-        <div class="collapse" id="col-diagramacao">
+        <div class="mod-body" id="col-diagramacao">
           <hr class="divider" />
           <div style="padding:1.1rem 1.25rem 1.25rem;">
             <label class="lbl">Provas diagramadas</label>
@@ -349,7 +348,7 @@
   function toggleMod(m) {
     mods[m] = !mods[m];
     document.getElementById(`tgl-${m}`).classList.toggle('on', mods[m]);
-    document.getElementById(`col-${m}`).classList.toggle('shut', !mods[m]);
+    document.getElementById(`col-${m}`).style.display = mods[m] ? 'block' : 'none';
     document.getElementById(`mcard-${m}`).classList.toggle('active', mods[m]);
     document.getElementById(`row-${m}`).style.opacity = mods[m] ? '1' : '.3';
     calc();
