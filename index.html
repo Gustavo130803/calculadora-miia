@@ -7,154 +7,153 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    :root { --p: #801DFF; --v: #A535FF; --o: #F39D60; --bg: #1C052B; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Sora', sans-serif; background: var(--bg); min-height: 100vh; color: #fff; }
+    :root { --p:#801DFF; --v:#A535FF; --o:#F39D60; --bg:#F0EAFF; --txt:#1C052B; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Sora',sans-serif; background:var(--bg); min-height:100vh; color:var(--txt); }
 
-    /* ── Typography ── */
-    .f-display { font-family: 'Raleway', sans-serif; }
+    .f-display { font-family:'Raleway',sans-serif; }
 
-    /* ── Logo ── */
-    .logo {
-      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 1.4rem; letter-spacing: .1em;
-      background: linear-gradient(90deg, #fff 20%, #c084fc 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    /* ── Cards ── */
+    .card {
+      background:#fff;
+      border-radius:1.25rem;
+      border:1px solid rgba(128,29,255,.09);
+      box-shadow:0 2px 20px rgba(128,29,255,.07);
     }
-
-    /* ── Metric cards (top) ── */
-    .metric {
-      flex: 1;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 1.25rem;
-      padding: 1.75rem 1.5rem;
-    }
-    .metric.primary {
-      background: linear-gradient(135deg, var(--p), var(--v));
-      border: none;
-    }
-
-    /* ── Section cards ── */
-    .section {
-      background: rgba(255,255,255,0.035);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 1.25rem;
+    .card-grad {
+      background:linear-gradient(135deg,var(--p),var(--v));
+      border-radius:1.25rem;
+      box-shadow:0 8px 32px rgba(128,29,255,.28);
     }
 
     /* ── Module card ── */
     .mod-card {
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 1rem;
-      overflow: hidden;
-      transition: border-color .2s;
+      background:#fff;
+      border:1.5px solid rgba(128,29,255,.08);
+      border-radius:1.25rem;
+      box-shadow:0 2px 12px rgba(128,29,255,.05);
+      overflow:hidden;
+      transition:border-color .2s, box-shadow .2s;
     }
-    .mod-card.active { border-color: rgba(165,53,255,.3); }
+    .mod-card.active {
+      border-color:rgba(128,29,255,.25);
+      box-shadow:0 4px 20px rgba(128,29,255,.1);
+    }
 
     /* ── Toggle ── */
-    .tgl { width: 2.4rem; height: 1.3rem; border-radius: 9999px; background: rgba(255,255,255,.12); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; }
-    .tgl.on { background: var(--v); }
-    .tgl::after { content:''; position:absolute; top:.17rem; left:.17rem; width:.96rem; height:.96rem; background:#fff; border-radius:9999px; transition: transform .2s; }
-    .tgl.on::after { transform: translateX(1.1rem); }
+    .tgl { width:2.4rem; height:1.3rem; border-radius:9999px; background:rgba(28,5,43,.15); position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+    .tgl.on { background:var(--v); }
+    .tgl::after { content:''; position:absolute; top:.17rem; left:.17rem; width:.96rem; height:.96rem; background:#fff; border-radius:9999px; transition:transform .2s; box-shadow:0 1px 4px rgba(0,0,0,.15); }
+    .tgl.on::after { transform:translateX(1.1rem); }
 
     /* ── Inputs ── */
     .inp {
-      width: 100%; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
-      color: #fff; border-radius: .75rem; padding: .6rem .9rem; font-family: 'Sora', sans-serif; font-size: .88rem;
-      outline: none; transition: border-color .2s;
+      width:100%; background:#F8F5FF; border:1.5px solid rgba(128,29,255,.13);
+      color:var(--txt); border-radius:.75rem; padding:.65rem .9rem;
+      font-family:'Sora',sans-serif; font-size:.88rem; outline:none; transition:border-color .2s;
     }
-    .inp::placeholder { color: rgba(255,255,255,.2); }
-    .inp:focus { border-color: var(--v); }
-    .inp::-webkit-inner-spin-button { -webkit-appearance: none; }
-    .inp-prefix { padding-left: 2.25rem; }
+    .inp::placeholder { color:rgba(28,5,43,.22); }
+    .inp:focus { border-color:var(--p); background:#fff; }
+    .inp::-webkit-inner-spin-button { -webkit-appearance:none; }
+
+    /* ── Frequency pill select ── */
+    .freq {
+      flex-shrink:0;
+      background:#EDE6FA;
+      border:1.5px solid rgba(128,29,255,.18);
+      color:var(--p); border-radius:.6rem;
+      padding:.42rem .55rem;
+      font-family:'Sora',sans-serif; font-size:.72rem; font-weight:600;
+      outline:none; cursor:pointer; transition:border-color .2s;
+      appearance:none; -webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23801DFF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right .4rem center;
+      padding-right:1.4rem;
+    }
+    .freq:focus { border-color:var(--p); }
 
     /* ── Label ── */
-    .lbl { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: .4rem; }
+    .lbl { display:block; font-size:.67rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:rgba(28,5,43,.38); margin-bottom:.4rem; }
 
     /* ── Collapse ── */
-    .collapse { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .3s ease, opacity .25s ease; opacity: 1; }
-    .collapse.shut { grid-template-rows: 0fr; opacity: 0; }
-    .collapse > div { overflow: hidden; }
+    .collapse { display:grid; grid-template-rows:1fr; transition:grid-template-rows .3s ease, opacity .25s ease; opacity:1; }
+    .collapse.shut { grid-template-rows:0fr; opacity:0; }
+    .collapse > div { overflow:hidden; }
 
     /* ── Detail row ── */
-    .drow { display: flex; justify-content: space-between; padding: .45rem 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .76rem; }
-    .drow:last-child { border: none; }
+    .drow { display:flex; justify-content:space-between; align-items:baseline; padding:.48rem 0; border-bottom:1px solid rgba(128,29,255,.06); font-size:.78rem; }
+    .drow:last-child { border:none; }
 
     /* ── CTA ── */
     .cta {
-      display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%;
-      background: linear-gradient(135deg, var(--p), var(--v));
-      color: #fff; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: .9rem;
-      border: none; border-radius: 1rem; padding: 1rem; cursor: pointer; text-decoration: none;
-      transition: opacity .2s, transform .15s; box-shadow: 0 8px 32px rgba(128,29,255,.35);
+      display:flex; align-items:center; justify-content:center; gap:.5rem; width:100%;
+      background:linear-gradient(135deg,var(--p),var(--v));
+      color:#fff; font-family:'Raleway',sans-serif; font-weight:800; font-size:.92rem;
+      border:none; border-radius:1rem; padding:1rem; cursor:pointer; text-decoration:none;
+      transition:opacity .2s, transform .15s; box-shadow:0 8px 24px rgba(128,29,255,.32);
     }
-    .cta:hover { opacity: .9; transform: translateY(-1px); }
-    .cta:active { transform: scale(.98); }
+    .cta:hover { opacity:.9; transform:translateY(-1px); }
+    .cta:active { transform:scale(.98); }
 
-    /* ── Dot ── */
-    .dot { width: 7px; height: 7px; border-radius: 9999px; flex-shrink: 0; margin-top: 2px; }
+    .dot { width:7px; height:7px; border-radius:9999px; flex-shrink:0; margin-top:3px; }
 
-    @media (max-width: 767px) {
-      .metrics-row { flex-direction: column; }
-      .main-grid { grid-template-columns: 1fr !important; }
+    /* ── Divider ── */
+    .divider { border:none; border-top:1px solid rgba(128,29,255,.07); margin:.1rem 0; }
+
+    @media (max-width:767px) {
+      .metrics-row { flex-direction:column; }
+      .main-grid { grid-template-columns:1fr !important; }
     }
     @media print {
-      .no-print { display: none !important; }
-      body { background: #fff !important; color: #111 !important; }
+      .no-print { display:none !important; }
+      body { background:#fff !important; }
     }
   </style>
 </head>
 <body>
-<div style="max-width:1080px; margin:0 auto; padding:2rem 1.25rem 5rem;">
+<div style="max-width:1080px; margin:0 auto; padding:2.5rem 1.5rem 5rem;">
 
   <!-- ═══ HEADER ═══ -->
-  <header class="no-print" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:2.75rem;">
-    <span class="logo">MIIA</span>
-    <span style="font-size:.68rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#a78bfa; background:rgba(167,139,250,.08); border:1px solid rgba(167,139,250,.2); padding:.28rem .85rem; border-radius:9999px;">
+  <header class="no-print" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:3rem;">
+    <span class="f-display" style="font-size:1.6rem; font-weight:900; color:var(--p); letter-spacing:.04em;">MIIA</span>
+    <span style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--p); background:rgba(128,29,255,.08); border:1px solid rgba(128,29,255,.15); padding:.3rem .9rem; border-radius:9999px;">
       Calculadora de ROI
     </span>
   </header>
 
-  <!-- ═══ HERO TITLE ═══ -->
-  <div class="no-print" style="text-align:center; margin-bottom:2.5rem;">
-    <h1 class="f-display" style="font-size:clamp(1.7rem,3.2vw,2.4rem); font-weight:900; line-height:1.15; margin-bottom:.6rem;">
+  <!-- ═══ HERO ═══ -->
+  <div class="no-print" style="text-align:center; margin-bottom:2.75rem;">
+    <h1 class="f-display" style="font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:900; line-height:1.15; color:var(--txt); margin-bottom:.75rem;">
       Quanto a MIIA economiza<br/>
       <span style="background:linear-gradient(90deg,var(--p),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
         para a sua instituição?
       </span>
     </h1>
-    <p style="color:rgba(255,255,255,.35); font-size:.88rem; max-width:420px; margin:0 auto; line-height:1.7;">
-      Ative as soluções e preencha os dados. O resultado aparece no topo em tempo real.
+    <p style="color:rgba(28,5,43,.4); font-size:.9rem; max-width:430px; margin:0 auto; line-height:1.75;">
+      Ative as soluções e preencha os dados. O resultado aparece em tempo real.
     </p>
   </div>
 
-  <!-- ═══ MÉTRICAS — DESTAQUE ═══ -->
+  <!-- ═══ MÉTRICAS ═══ -->
   <div class="metrics-row" style="display:flex; gap:1rem; margin-bottom:2rem;">
 
-    <!-- Economia -->
-    <div class="metric primary">
-      <p style="font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.75); margin-bottom:.5rem;">
-        Economia Financeira / Ano
-      </p>
-      <p id="resTotal" class="f-display" style="font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:900; line-height:1; color:#fff;">—</p>
-      <p style="font-size:.73rem; color:rgba(255,255,255,.6); margin-top:.5rem;">em custos operacionais</p>
+    <div class="card-grad" style="flex:1.3; padding:1.75rem 1.5rem;">
+      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.75); margin-bottom:.5rem;">Economia Financeira / Ano</p>
+      <p id="resTotal" class="f-display" style="font-size:clamp(1.9rem,3.5vw,2.7rem); font-weight:900; color:#fff; line-height:1;">—</p>
+      <p style="font-size:.73rem; color:rgba(255,255,255,.6); margin-top:.45rem;">em custos operacionais</p>
     </div>
 
-    <!-- Horas -->
-    <div class="metric">
-      <p style="font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(165,53,255,.7); margin-bottom:.5rem;">
-        Horas Recuperadas
-      </p>
-      <p id="resHoras" class="f-display" style="font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:900; color:#fff;">—</p>
-      <p id="resHorasSem" style="font-size:.73rem; color:rgba(255,255,255,.3); margin-top:.5rem;">por ano</p>
+    <div class="card" style="flex:1; padding:1.75rem 1.5rem;">
+      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(128,29,255,.55); margin-bottom:.5rem;">Horas Recuperadas</p>
+      <p id="resHoras" class="f-display" style="font-size:clamp(1.9rem,3.5vw,2.7rem); font-weight:900; color:var(--txt); line-height:1;">—</p>
+      <p id="resHorasSub" style="font-size:.73rem; color:rgba(28,5,43,.3); margin-top:.45rem;">por ano</p>
     </div>
 
-    <!-- Escala -->
-    <div class="metric">
-      <p style="font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(165,53,255,.7); margin-bottom:.5rem;">
-        Eficiência Ganha
-      </p>
-      <p id="resEfic" class="f-display" style="font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:900; color:#fff;">—</p>
-      <p style="font-size:.73rem; color:rgba(255,255,255,.3); margin-top:.5rem;">mais capacidade operacional</p>
+    <div class="card" style="flex:1; padding:1.75rem 1.5rem;">
+      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(128,29,255,.55); margin-bottom:.5rem;">Eficiência Ganha</p>
+      <p id="resEfic" class="f-display" style="font-size:clamp(1.9rem,3.5vw,2.7rem); font-weight:900; color:var(--txt); line-height:1;">—</p>
+      <p style="font-size:.73rem; color:rgba(28,5,43,.3); margin-top:.45rem;">mais capacidade operacional</p>
     </div>
 
   </div>
@@ -162,20 +161,18 @@
   <!-- ═══ MAIN GRID ═══ -->
   <div class="main-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; align-items:start;">
 
-    <!-- ─── LEFT: INPUTS ─── -->
+    <!-- ─── LEFT ─── -->
     <div style="display:flex; flex-direction:column; gap:1rem;">
 
       <!-- Parâmetros gerais -->
-      <div class="section" style="padding:1.5rem;">
-        <p style="font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:1.1rem;">
-          Parâmetros Gerais
-        </p>
+      <div class="card" style="padding:1.5rem;">
+        <p class="lbl" style="margin-bottom:1.1rem;">Parâmetros Gerais</p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:.85rem;">
           <div>
             <label class="lbl">Hora/Aula do Docente</label>
             <div style="position:relative;">
-              <span style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:rgba(165,53,255,.55);font-size:.8rem;font-weight:600;">R$</span>
-              <input type="number" id="valorHora" min="1" step="10" placeholder="Ex: 150" oninput="calc()" class="inp inp-prefix" />
+              <span style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--p);font-size:.8rem;font-weight:700;opacity:.55;">R$</span>
+              <input type="number" id="valorHora" min="1" step="10" placeholder="Ex: 150" oninput="calc()" class="inp" style="padding-left:2.25rem;" />
             </div>
           </div>
           <div>
@@ -185,79 +182,109 @@
         </div>
       </div>
 
-      <!-- Módulo 1: Correção -->
+      <!-- ── Módulo 1: Correção ── -->
       <div class="mod-card active" id="mcard-correcao">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;" onclick="toggleMod('correcao')">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;cursor:pointer;" onclick="toggleMod('correcao')">
           <div style="display:flex;align-items:center;gap:.85rem;">
-            <div style="width:2rem;height:2rem;border-radius:.6rem;background:rgba(96,165,250,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg style="width:.9rem;height:.9rem;color:#60a5fa;" fill="currentColor" viewBox="0 0 24 24"><path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z"/></svg>
+            <div style="width:2.2rem;height:2.2rem;border-radius:.65rem;background:rgba(128,29,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg style="width:1rem;height:1rem;" fill="none" stroke="var(--p)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 7.125L18 8.625"/></svg>
             </div>
             <div>
-              <p style="font-size:.84rem;font-weight:600;color:#fff;">Correção de Discursivas</p>
-              <p style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">16 min</span> economizados por prova</p>
+              <p style="font-size:.85rem;font-weight:600;color:var(--txt);">Correção de Discursivas</p>
+              <p style="font-size:.7rem;color:rgba(28,5,43,.35);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">16 min</span> economizados por prova</p>
             </div>
           </div>
           <div class="tgl on" id="tgl-correcao"></div>
         </div>
         <div class="collapse" id="col-correcao">
           <div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem;padding:0 1.25rem 1.25rem;">
+            <hr class="divider" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem;padding:1.1rem 1.25rem 1.25rem;">
               <div>
                 <label class="lbl">Nº de Alunos</label>
                 <input type="number" id="correcao_alunos" min="1" placeholder="Ex: 600" oninput="calc()" class="inp" />
               </div>
               <div>
-                <label class="lbl">Provas / Ano por Aluno</label>
-                <input type="number" id="correcao_provas" min="1" placeholder="Ex: 8" oninput="calc()" class="inp" />
+                <label class="lbl">Provas por aluno</label>
+                <div style="display:flex;gap:.45rem;align-items:center;">
+                  <input type="number" id="correcao_provas" min="1" placeholder="Ex: 4" oninput="calc()" class="inp" />
+                  <select class="freq" id="correcao_freq" onchange="calc()">
+                    <option value="1">/ ano</option>
+                    <option value="2" selected>/ semestre</option>
+                    <option value="12">/ mês</option>
+                    <option value="40">/ semana</option>
+                    <option value="200">/ dia</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Módulo 2: Geração -->
+      <!-- ── Módulo 2: Geração ── -->
       <div class="mod-card active" id="mcard-geracao">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;" onclick="toggleMod('geracao')">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;cursor:pointer;" onclick="toggleMod('geracao')">
           <div style="display:flex;align-items:center;gap:.85rem;">
-            <div style="width:2rem;height:2rem;border-radius:.6rem;background:rgba(167,139,250,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg style="width:.9rem;height:.9rem;color:#a78bfa;" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5z" clip-rule="evenodd"/></svg>
+            <div style="width:2.2rem;height:2.2rem;border-radius:.65rem;background:rgba(128,29,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg style="width:1rem;height:1rem;" fill="none" stroke="var(--p)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/><path stroke-linecap="round" stroke-linejoin="round" d="M18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg>
             </div>
             <div>
-              <p style="font-size:.84rem;font-weight:600;color:#fff;">Geração de Questões Inéditas</p>
-              <p style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">27 min</span> economizados por questão</p>
+              <p style="font-size:.85rem;font-weight:600;color:var(--txt);">Geração de Questões Inéditas</p>
+              <p style="font-size:.7rem;color:rgba(28,5,43,.35);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">27 min</span> economizados por questão</p>
             </div>
           </div>
           <div class="tgl on" id="tgl-geracao"></div>
         </div>
         <div class="collapse" id="col-geracao">
           <div>
-            <div style="padding:0 1.25rem 1.25rem;">
-              <label class="lbl">Total de Questões Geradas / Ano</label>
-              <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 1.200" oninput="calc()" class="inp" />
+            <hr class="divider" />
+            <div style="padding:1.1rem 1.25rem 1.25rem;">
+              <label class="lbl">Questões geradas</label>
+              <div style="display:flex;gap:.45rem;align-items:center;">
+                <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 200" oninput="calc()" class="inp" />
+                <select class="freq" id="geracao_freq" onchange="calc()">
+                  <option value="1">/ ano</option>
+                  <option value="2" selected>/ semestre</option>
+                  <option value="12">/ mês</option>
+                  <option value="40">/ semana</option>
+                  <option value="200">/ dia</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Módulo 3: Diagramação -->
+      <!-- ── Módulo 3: Diagramação ── -->
       <div class="mod-card active" id="mcard-diagramacao">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;" onclick="toggleMod('diagramacao')">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;cursor:pointer;" onclick="toggleMod('diagramacao')">
           <div style="display:flex;align-items:center;gap:.85rem;">
-            <div style="width:2rem;height:2rem;border-radius:.6rem;background:rgba(52,211,153,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg style="width:.9rem;height:.9rem;color:#34d399;" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z" clip-rule="evenodd"/></svg>
+            <div style="width:2.2rem;height:2.2rem;border-radius:.65rem;background:rgba(128,29,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg style="width:1rem;height:1rem;" fill="none" stroke="var(--p)" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
             </div>
             <div>
-              <p style="font-size:.84rem;font-weight:600;color:#fff;">Diagramação Automática de Provas</p>
-              <p style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">43 min</span> economizados por prova</p>
+              <p style="font-size:.85rem;font-weight:600;color:var(--txt);">Diagramação Automática de Provas</p>
+              <p style="font-size:.7rem;color:rgba(28,5,43,.35);margin-top:.1rem;"><span style="color:var(--o);font-weight:600;">43 min</span> economizados por prova</p>
             </div>
           </div>
           <div class="tgl on" id="tgl-diagramacao"></div>
         </div>
         <div class="collapse" id="col-diagramacao">
           <div>
-            <div style="padding:0 1.25rem 1.25rem;">
-              <label class="lbl">Total de Provas Diagramadas / Ano</label>
-              <input type="number" id="diag_provas" min="1" placeholder="Ex: 400" oninput="calc()" class="inp" />
+            <hr class="divider" />
+            <div style="padding:1.1rem 1.25rem 1.25rem;">
+              <label class="lbl">Provas diagramadas</label>
+              <div style="display:flex;gap:.45rem;align-items:center;">
+                <input type="number" id="diag_provas" min="1" placeholder="Ex: 80" oninput="calc()" class="inp" />
+                <select class="freq" id="diag_freq" onchange="calc()">
+                  <option value="1">/ ano</option>
+                  <option value="2" selected>/ semestre</option>
+                  <option value="12">/ mês</option>
+                  <option value="40">/ semana</option>
+                  <option value="200">/ dia</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -265,67 +292,65 @@
 
     </div><!-- /LEFT -->
 
-    <!-- ─── RIGHT: BREAKDOWN + CTA ─── -->
+    <!-- ─── RIGHT ─── -->
     <div style="display:flex;flex-direction:column;gap:1rem;position:sticky;top:1.5rem;">
 
       <!-- Por módulo -->
-      <div class="section" style="padding:1.5rem;">
-        <p style="font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.1rem;">Por Módulo</p>
-        <div style="display:flex;flex-direction:column;gap:.1rem;">
+      <div class="card" style="padding:1.5rem;">
+        <p class="lbl" style="margin-bottom:1rem;">Por Módulo</p>
 
-          <div id="row-correcao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:opacity .25s;">
-            <div style="display:flex;align-items:center;gap:.6rem;">
-              <div class="dot" style="background:#60a5fa;"></div>
-              <span style="font-size:.8rem;color:rgba(255,255,255,.5);">Correção de Discursivas</span>
-            </div>
-            <div style="text-align:right;">
-              <p id="mod-c-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:#fff;">—</p>
-              <p id="mod-c-h" style="font-size:.68rem;color:rgba(255,255,255,.25);">—</p>
-            </div>
+        <div id="row-correcao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(128,29,255,.07);transition:opacity .25s;">
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <div class="dot" style="background:var(--p);"></div>
+            <span style="font-size:.8rem;color:rgba(28,5,43,.45);">Correção de Discursivas</span>
           </div>
-
-          <div id="row-geracao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:opacity .25s;">
-            <div style="display:flex;align-items:center;gap:.6rem;">
-              <div class="dot" style="background:#a78bfa;"></div>
-              <span style="font-size:.8rem;color:rgba(255,255,255,.5);">Geração de Questões</span>
-            </div>
-            <div style="text-align:right;">
-              <p id="mod-g-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:#fff;">—</p>
-              <p id="mod-g-h" style="font-size:.68rem;color:rgba(255,255,255,.25);">—</p>
-            </div>
+          <div style="text-align:right;">
+            <p id="mod-c-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:var(--txt);">—</p>
+            <p id="mod-c-h" style="font-size:.68rem;color:rgba(28,5,43,.3);">—</p>
           </div>
+        </div>
 
-          <div id="row-diagramacao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;transition:opacity .25s;">
-            <div style="display:flex;align-items:center;gap:.6rem;">
-              <div class="dot" style="background:#34d399;"></div>
-              <span style="font-size:.8rem;color:rgba(255,255,255,.5);">Diagramação de Provas</span>
-            </div>
-            <div style="text-align:right;">
-              <p id="mod-d-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:#fff;">—</p>
-              <p id="mod-d-h" style="font-size:.68rem;color:rgba(255,255,255,.25);">—</p>
-            </div>
+        <div id="row-geracao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(128,29,255,.07);transition:opacity .25s;">
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <div class="dot" style="background:var(--v);"></div>
+            <span style="font-size:.8rem;color:rgba(28,5,43,.45);">Geração de Questões</span>
+          </div>
+          <div style="text-align:right;">
+            <p id="mod-g-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:var(--txt);">—</p>
+            <p id="mod-g-h" style="font-size:.68rem;color:rgba(28,5,43,.3);">—</p>
+          </div>
+        </div>
+
+        <div id="row-diagramacao" style="display:flex;align-items:flex-start;justify-content:space-between;padding:.65rem 0;transition:opacity .25s;">
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <div class="dot" style="background:var(--o);"></div>
+            <span style="font-size:.8rem;color:rgba(28,5,43,.45);">Diagramação de Provas</span>
+          </div>
+          <div style="text-align:right;">
+            <p id="mod-d-eco" class="f-display" style="font-size:.9rem;font-weight:700;color:var(--txt);">—</p>
+            <p id="mod-d-h" style="font-size:.68rem;color:rgba(28,5,43,.3);">—</p>
           </div>
         </div>
       </div>
 
       <!-- Detalhamento -->
-      <div class="section" style="padding:1.5rem;">
-        <p style="font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1rem;">Detalhamento</p>
+      <div class="card" style="padding:1.5rem;">
+        <p class="lbl" style="margin-bottom:1rem;">Detalhamento</p>
         <div id="detalhes">
-          <p style="font-size:.78rem;color:rgba(255,255,255,.2);text-align:center;padding:.5rem 0;">Preencha os campos para ver</p>
+          <p style="font-size:.78rem;color:rgba(28,5,43,.22);text-align:center;padding:.5rem 0;">Preencha os campos para ver o resultado</p>
         </div>
       </div>
 
       <!-- CTA -->
       <div class="no-print" style="display:flex;flex-direction:column;gap:.75rem;padding-top:.25rem;">
         <a id="btnWpp" href="#" target="_blank" class="cta">
-          <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="currentColor" viewBox="0 0 24 24">
+          <svg style="width:1.05rem;height:1.05rem;flex-shrink:0;" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
             <path d="M12 0C5.373 0 0 5.373 0 12c0 2.134.559 4.133 1.535 5.867L.057 23.428a.5.5 0 00.619.62l5.64-1.488A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.6a9.55 9.55 0 01-4.943-1.37l-.355-.21-3.666.968.981-3.574-.231-.367A9.554 9.554 0 012.4 12C2.4 6.698 6.698 2.4 12 2.4S21.6 6.698 21.6 12 17.302 21.6 12 21.6z"/>
           </svg>
           Falar com especialista MIIA
         </a>
-        <button onclick="window.print()" style="background:transparent;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.3);font-family:'Sora',sans-serif;font-size:.75rem;border-radius:.875rem;padding:.6rem;cursor:pointer;transition:border-color .2s,color .2s;" onmouseover="this.style.borderColor='rgba(165,53,255,.3)';this.style.color='rgba(165,53,255,.7)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)';this.style.color='rgba(255,255,255,.3)'">
+        <button onclick="window.print()" style="background:transparent;border:1.5px solid rgba(128,29,255,.13);color:rgba(28,5,43,.35);font-family:'Sora',sans-serif;font-size:.75rem;border-radius:.875rem;padding:.65rem;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='rgba(128,29,255,.3)';this.style.color='var(--p)'" onmouseout="this.style.borderColor='rgba(128,29,255,.13)';this.style.color='rgba(28,5,43,.35)'">
           Exportar como PDF
         </button>
       </div>
@@ -335,8 +360,8 @@
 </div>
 
 <script>
-  const WPP = '5511999999999';
-  const mods = { correcao: true, geracao: true, diagramacao: true };
+  const WPP  = '5511999999999';
+  const mods = { correcao:true, geracao:true, diagramacao:true };
 
   function toggleMod(m) {
     mods[m] = !mods[m];
@@ -347,81 +372,83 @@
     calc();
   }
 
-  const fmtBRL = n => n.toLocaleString('pt-BR', { style:'currency', currency:'BRL', minimumFractionDigits:0 });
+  const fmtBRL = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:0});
   const fmt    = n => Math.round(n).toLocaleString('pt-BR');
-  const set    = (id, v) => document.getElementById(id).textContent = v;
+  const set    = (id,v) => document.getElementById(id).textContent = v;
+  const freq   = id => parseFloat(document.getElementById(id).value) || 1;
 
   function calc() {
     const vh = parseFloat(document.getElementById('valorHora').value);
     const ok = !isNaN(vh) && vh > 0;
 
-    // Correção: alunos × provas/ano × 16 min
+    // Correção: alunos × (provas × freq_anual) × 16 min
     let hC=0, eC=0;
     if (mods.correcao) {
       const a = parseFloat(document.getElementById('correcao_alunos').value)||0;
       const p = parseFloat(document.getElementById('correcao_provas').value)||0;
-      hC = a * p * (16/60);
+      hC = a * p * freq('correcao_freq') * (16/60);
       eC = ok ? hC * vh : 0;
     }
 
-    // Geração: questões × 27 min
+    // Geração: questoes × freq_anual × 27 min
     let hG=0, eG=0;
     if (mods.geracao) {
       const q = parseFloat(document.getElementById('geracao_questoes').value)||0;
-      hG = q * (27/60);
+      hG = q * freq('geracao_freq') * (27/60);
       eG = ok ? hG * vh : 0;
     }
 
-    // Diagramação: provas × 43 min
+    // Diagramação: provas × freq_anual × 43 min
     let hD=0, eD=0;
     if (mods.diagramacao) {
       const p = parseFloat(document.getElementById('diag_provas').value)||0;
-      hD = p * (43/60);
+      hD = p * freq('diag_freq') * (43/60);
       eD = ok ? hD * vh : 0;
     }
 
     const tH = hC + hG + hD;
     const tE = eC + eG + eD;
-    const sem = Math.round(tH / 48);
-    const efic = tH > 0 ? '+' + fmt(Math.round((tH / (tH + (eC/vh||0) + (eG/vh||0) + (eD/vh||0))) * 100 + 22)) + '%' : '—';
 
-    // Hero metrics
-    set('resTotal', tH > 0 && ok ? fmtBRL(tE) : '—');
-    set('resHoras', tH > 0 ? fmt(tH) + 'h' : '—');
-    set('resHorasSem', tH > 0 ? `por ano · ${fmt(sem)}h por semana` : 'por ano');
-    set('resEfic', tH > 0 ? '+22%' : '—');
+    // Métricas topo
+    set('resTotal',    tH>0&&ok ? fmtBRL(tE) : '—');
+    set('resHoras',    tH>0 ? fmt(tH)+'h' : '—');
+    set('resHorasSub', tH>0 ? `por ano · ${fmt(tH/48)}h por semana` : 'por ano');
+    set('resEfic',     tH>0 ? '+22%' : '—');
 
     // Por módulo
-    set('mod-c-eco', hC > 0 && ok ? fmtBRL(eC) : '—');
-    set('mod-c-h',   hC > 0 ? fmt(hC) + 'h' : '—');
-    set('mod-g-eco', hG > 0 && ok ? fmtBRL(eG) : '—');
-    set('mod-g-h',   hG > 0 ? fmt(hG) + 'h' : '—');
-    set('mod-d-eco', hD > 0 && ok ? fmtBRL(eD) : '—');
-    set('mod-d-h',   hD > 0 ? fmt(hD) + 'h' : '—');
+    set('mod-c-eco', hC>0&&ok ? fmtBRL(eC) : '—');
+    set('mod-c-h',   hC>0 ? fmt(hC)+'h/ano' : '—');
+    set('mod-g-eco', hG>0&&ok ? fmtBRL(eG) : '—');
+    set('mod-g-h',   hG>0 ? fmt(hG)+'h/ano' : '—');
+    set('mod-d-eco', hD>0&&ok ? fmtBRL(eD) : '—');
+    set('mod-d-h',   hD>0 ? fmt(hD)+'h/ano' : '—');
 
     // Detalhamento
     const rows = [];
-    if (mods.correcao && hC > 0) {
+    if (mods.correcao && hC>0) {
       const a = parseFloat(document.getElementById('correcao_alunos').value)||0;
       const p = parseFloat(document.getElementById('correcao_provas').value)||0;
-      rows.push(['Total de provas/ano', fmt(a*p)]);
-      rows.push(['Tempo economizado', fmt(hC)+'h (16 min/prova)']);
+      const f = freq('correcao_freq');
+      rows.push(['Total de provas/ano', fmt(a*p*f)]);
+      rows.push(['Horas economizadas', fmt(hC)+'h']);
     }
-    if (mods.geracao && hG > 0) {
-      rows.push(['Total de questões/ano', fmt(parseFloat(document.getElementById('geracao_questoes').value)||0)]);
-      rows.push(['Tempo economizado', fmt(hG)+'h (27 min/questão)']);
+    if (mods.geracao && hG>0) {
+      const q = parseFloat(document.getElementById('geracao_questoes').value)||0;
+      rows.push(['Total de questões/ano', fmt(q*freq('geracao_freq'))]);
+      rows.push(['Horas economizadas', fmt(hG)+'h']);
     }
-    if (mods.diagramacao && hD > 0) {
-      rows.push(['Total de provas diagramadas/ano', fmt(parseFloat(document.getElementById('diag_provas').value)||0)]);
-      rows.push(['Tempo economizado', fmt(hD)+'h (43 min/prova)']);
+    if (mods.diagramacao && hD>0) {
+      const p = parseFloat(document.getElementById('diag_provas').value)||0;
+      rows.push(['Total de provas diagramadas/ano', fmt(p*freq('diag_freq'))]);
+      rows.push(['Horas economizadas', fmt(hD)+'h']);
     }
-    if (ok) rows.push(['Hora docente', fmtBRL(vh)]);
+    if (ok) rows.push(['Valor hora docente', fmtBRL(vh)]);
 
     document.getElementById('detalhes').innerHTML = rows.length
-      ? rows.map(([l,v]) => `<div class="drow"><span style="color:rgba(255,255,255,.35)">${l}</span><span class="f-display" style="color:rgba(255,255,255,.8);font-weight:600">${v}</span></div>`).join('')
-      : '<p style="font-size:.78rem;color:rgba(255,255,255,.2);text-align:center;padding:.5rem 0;">Preencha os campos para ver</p>';
+      ? rows.map(([l,v])=>`<div class="drow"><span style="color:rgba(28,5,43,.4);font-size:.76rem">${l}</span><span class="f-display" style="color:var(--txt);font-weight:700;font-size:.82rem">${v}</span></div>`).join('')
+      : '<p style="font-size:.78rem;color:rgba(28,5,43,.22);text-align:center;padding:.5rem 0;">Preencha os campos para ver o resultado</p>';
 
-    if (tH > 0 && ok) {
+    if (tH>0 && ok) {
       const msg = encodeURIComponent(`Olá! Simulei o ROI da MIIA: ${fmtBRL(tE)} de economia/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
       document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
     }
