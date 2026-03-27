@@ -167,18 +167,13 @@
       <!-- Parâmetros gerais -->
       <div class="card" style="padding:1.5rem;">
         <p class="lbl" style="margin-bottom:1.1rem;">Parâmetros Gerais</p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.85rem;">
-          <div>
-            <label class="lbl">Hora/Aula do Docente</label>
-            <div style="position:relative;">
-              <span style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--p);font-size:.8rem;font-weight:700;opacity:.55;">R$</span>
-              <input type="number" id="valorHora" min="1" step="10" placeholder="Ex: 150" oninput="calc()" class="inp" style="padding-left:2.25rem;" />
-            </div>
+        <div>
+          <label class="lbl">Valor da Hora/Aula do Docente</label>
+          <div style="position:relative;">
+            <span style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--p);font-size:.8rem;font-weight:700;opacity:.55;">R$</span>
+            <input type="number" id="valorHora" min="1" step="10" placeholder="Ex: 150" oninput="calc()" class="inp" style="padding-left:2.25rem;" />
           </div>
-          <div>
-            <label class="lbl">Professores Ativos</label>
-            <input type="number" id="numProfs" min="1" placeholder="Ex: 50" oninput="calc()" class="inp" />
-          </div>
+          <p style="font-size:.68rem;color:rgba(28,5,43,.3);margin-top:.4rem;">Usado para converter horas economizadas em valor financeiro</p>
         </div>
       </div>
 
@@ -199,24 +194,19 @@
         <div class="collapse" id="col-correcao">
           <div>
             <hr class="divider" />
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem;padding:1.1rem 1.25rem 1.25rem;">
-              <div>
-                <label class="lbl">Nº de Alunos</label>
-                <input type="number" id="correcao_alunos" min="1" placeholder="Ex: 600" oninput="calc()" class="inp" />
+            <div style="padding:1.1rem 1.25rem 1.25rem;">
+              <label class="lbl">Redações / provas corrigidas</label>
+              <div style="display:flex;gap:.45rem;align-items:center;">
+                <input type="number" id="correcao_vol" min="1" placeholder="Ex: 500" oninput="calc()" class="inp" />
+                <select class="freq" id="correcao_freq" onchange="calc()">
+                  <option value="1">/ ano</option>
+                  <option value="2" selected>/ semestre</option>
+                  <option value="12">/ mês</option>
+                  <option value="40">/ semana</option>
+                  <option value="200">/ dia</option>
+                </select>
               </div>
-              <div>
-                <label class="lbl">Provas por aluno</label>
-                <div style="display:flex;gap:.45rem;align-items:center;">
-                  <input type="number" id="correcao_provas" min="1" placeholder="Ex: 4" oninput="calc()" class="inp" />
-                  <select class="freq" id="correcao_freq" onchange="calc()">
-                    <option value="1">/ ano</option>
-                    <option value="2" selected>/ semestre</option>
-                    <option value="12">/ mês</option>
-                    <option value="40">/ semana</option>
-                    <option value="200">/ dia</option>
-                  </select>
-                </div>
-              </div>
+              <p style="font-size:.68rem;color:rgba(28,5,43,.3);margin-top:.4rem;">Total de provas corrigidas pela instituição no período</p>
             </div>
           </div>
         </div>
@@ -381,12 +371,11 @@
     const vh = parseFloat(document.getElementById('valorHora').value);
     const ok = !isNaN(vh) && vh > 0;
 
-    // Correção: alunos × (provas × freq_anual) × 16 min
+    // Correção: volume × freq_anual × 16 min
     let hC=0, eC=0;
     if (mods.correcao) {
-      const a = parseFloat(document.getElementById('correcao_alunos').value)||0;
-      const p = parseFloat(document.getElementById('correcao_provas').value)||0;
-      hC = a * p * freq('correcao_freq') * (16/60);
+      const v = parseFloat(document.getElementById('correcao_vol').value)||0;
+      hC = v * freq('correcao_freq') * (16/60);
       eC = ok ? hC * vh : 0;
     }
 
@@ -426,11 +415,10 @@
     // Detalhamento
     const rows = [];
     if (mods.correcao && hC>0) {
-      const a = parseFloat(document.getElementById('correcao_alunos').value)||0;
-      const p = parseFloat(document.getElementById('correcao_provas').value)||0;
+      const v = parseFloat(document.getElementById('correcao_vol').value)||0;
       const f = freq('correcao_freq');
-      rows.push(['Total de provas/ano', fmt(a*p*f)]);
-      rows.push(['Horas economizadas', fmt(hC)+'h']);
+      rows.push(['Total de provas corrigidas/ano', fmt(v*f)]);
+      rows.push(['Horas economizadas (Correção)', fmt(hC)+'h']);
     }
     if (mods.geracao && hG>0) {
       const q = parseFloat(document.getElementById('geracao_questoes').value)||0;
