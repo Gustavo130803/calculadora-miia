@@ -25,11 +25,16 @@ flowchart TD
 
     G --> H1[Economia Financeira / Ano]
     G --> H2[Horas Recuperadas / Ano]
-    G --> H3[Eficiência Ganha]
+    G --> H3[Eficiência Ganha +22%]
 
-    H1 & H2 & H3 --> I{Lead satisfeito?}
-    I -- Sim --> J([Clica: Falar com especialista MIIA])
-    I -- Não --> B
+    H1 & H2 & H3 --> I{Ação do lead}
+
+    I --> J1[Falar com especialista — WhatsApp]
+    I --> J2[Falar com especialista — E-mail]
+    I --> J3[Compartilhar resultado via WhatsApp]
+    I --> J4[Compartilhar resultado via E-mail]
+    I --> J5[Copiar link do resultado]
+    I --> J6[Exportar como PDF]
 ```
 
 ---
@@ -82,6 +87,8 @@ graph TD
         PAGES --> DOM[HTML + Tailwind CDN]
         DOM --> JS[JavaScript puro — calc]
         JS -->|oninput / onchange| JS
+        JS -->|buildShareURL| URL[URL com parâmetros]
+        URL -->|loadFromURL| JS
     end
 ```
 
@@ -123,13 +130,29 @@ classDiagram
 
 ---
 
+## Ações disponíveis após o cálculo
+
+```mermaid
+flowchart LR
+    R[Resultado calculado] --> A1[Falar com especialista\nWhatsApp]
+    R --> A2[Falar com especialista\nE-mail]
+    R --> A3[Compartilhar resultado\nWhatsApp — link com parâmetros]
+    R --> A4[Compartilhar resultado\nE-mail — link com parâmetros]
+    R --> A5[Copiar link do resultado]
+    R --> A6[Exportar PDF\n1 página · cores MIIA]
+
+    A3 & A4 & A5 --> L[Link compartilhável\nURL com query params\nAuto-preenche ao abrir]
+```
+
+---
+
 ## Stack
 
 | Camada | Tecnologia |
 |---|---|
 | Frontend | HTML5 + CSS3 + JavaScript vanilla |
 | Estilo | Tailwind CSS via CDN |
-| Fontes | Google Fonts — Raleway + Sora |
+| Fontes | Google Fonts — Montserrat (números/títulos) + Sora (corpo) |
 | Hospedagem | GitHub Pages (gratuito) |
 | CI/CD | GitHub Actions — deploy automático no push |
 
