@@ -25,7 +25,7 @@ flowchart TD
 
     G --> H1[ROI Líquido / Ano\neconomia docentes − custo MIIA]
     G --> H2[Horas Recuperadas / Ano]
-    G --> H3[Eficiência Ganha +22%]
+    G --> H3[Payback em meses\ncusto MIIA ÷ economia bruta × 12]
 
     H1 & H2 & H3 --> I{Ação do lead}
 
@@ -73,6 +73,7 @@ flowchart LR
     subgraph ROI
         EB --> |"−"| RL[ROI Líquido]
         CM --> |"−"| RL
+        CM --> |"÷ EB × 12"| PB[Payback em meses]
     end
 ```
 
@@ -146,6 +147,7 @@ classDiagram
         +float precoMIIA
         +toggleMod()
         +calcROI() economiaBruta - custoMIIA
+        +payback() custoMIIA ÷ economiaBruta × 12
     }
 
     class CorrecaoDiscursivas {
