@@ -580,7 +580,7 @@
     set('resHorasSub', tH>0 ? `por ano · ${fmt(tH/48)}h por semana` : 'por ano');
     set('resEfic',     tH>0 ? '+22%' : '—');
     if (ok && tH>0)
-      set('resCustoSub', `economia docentes ${fmtBRL(tBruto)} − custo MIIA ${fmtBRL(tCusto)}`);
+      set('resCustoSub', 'economia líquida anual estimada');
 
     // ── Por módulo (ROI líquido por módulo) ──
     const roiC = eBrutoC - custoC;
@@ -600,34 +600,24 @@
     if (mods.correcao && hC>0) {
       const vA = (parseFloat(document.getElementById('correcao_vol').value)||0) * freq('correcao_freq');
       rows.push(drow('Provas corrigidas/ano', fmt(vA)));
-      rows.push(drow('Tempo economizado', fmt(hC)+'h'));
-      if (ok) {
-        rows.push(drow('Economia docentes', fmtBRL(eBrutoC)));
-        rows.push(drow(`Custo MIIA (R$${precoC.toFixed(2).replace('.',',')}/prova)`, '− '+fmtBRL(custoC), 'var(--o)'));
-        rows.push(drow('ROI Correção', fmtBRL(roiC), roiC>=0?'var(--p)':'#e55'));
-      }
+      rows.push(drow('Horas economizadas', fmt(hC)+'h'));
+      if (ok) rows.push(drow('Economia estimada', fmtBRL(roiC), 'var(--p)'));
     }
     if (mods.geracao && hG>0) {
-      const tipo = document.querySelector('input[name="geracao_tipo"]:checked')?.value || 'obj';
-      const qA   = (parseFloat(document.getElementById('geracao_questoes').value)||0) * freq('geracao_freq');
+      const qA = (parseFloat(document.getElementById('geracao_questoes').value)||0) * freq('geracao_freq');
       rows.push(drow('Questões geradas/ano', fmt(qA)));
-      rows.push(drow('Tempo economizado', fmt(hG)+'h'));
-      if (ok) {
-        rows.push(drow('Economia docentes', fmtBRL(eBrutoG)));
-        rows.push(drow(`Custo MIIA (R$${precoG.toFixed(2).replace('.',',')}/questão)`, '− '+fmtBRL(custoG), 'var(--o)'));
-        rows.push(drow('ROI Geração', fmtBRL(roiG), roiG>=0?'var(--p)':'#e55'));
-      }
+      rows.push(drow('Horas economizadas', fmt(hG)+'h'));
+      if (ok) rows.push(drow('Economia estimada', fmtBRL(roiG), 'var(--p)'));
     }
     if (mods.diagramacao && hD>0) {
       const pA = (parseFloat(document.getElementById('diag_provas').value)||0) * freq('diag_freq');
       rows.push(drow('Provas diagramadas/ano', fmt(pA)));
-      rows.push(drow('Tempo economizado', fmt(hD)+'h'));
-      if (ok) rows.push(drow('Economia docentes', fmtBRL(eBrutoD)));
+      rows.push(drow('Horas economizadas', fmt(hD)+'h'));
+      if (ok) rows.push(drow('Economia estimada', fmtBRL(eBrutoD), 'var(--p)'));
     }
     if (ok && tH>0) {
       rows.push(drow('Hora/aula docente', fmtBRL(vh)));
-      rows.push(drow('Custo MIIA total/ano', '− '+fmtBRL(tCusto), 'var(--o)'));
-      rows.push(drow('ROI Líquido total', fmtBRL(tLiquido), tLiquido>=0?'var(--p)':'#e55'));
+      rows.push(drow('ROI Líquido / Ano', fmtBRL(tLiquido), 'var(--p)'));
     }
 
     document.getElementById('detalhes').innerHTML = rows.length
