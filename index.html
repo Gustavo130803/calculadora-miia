@@ -218,9 +218,9 @@
   <div class="metrics-row" style="display:flex; gap:1rem; margin-bottom:2rem;">
 
     <div class="card-grad" style="flex:1.3; padding:1.75rem 1.5rem;">
-      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.75); margin-bottom:.5rem;">Economia Financeira / Ano</p>
+      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.75); margin-bottom:.5rem;">ROI Líquido / Ano</p>
       <p id="resTotal" class="f-display" style="font-size:clamp(1.9rem,3.5vw,2.7rem); font-weight:900; color:#fff; line-height:1;">—</p>
-      <p style="font-size:.73rem; color:rgba(255,255,255,.6); margin-top:.45rem;">em custos operacionais</p>
+      <p id="resCustoSub" style="font-size:.73rem; color:rgba(255,255,255,.6); margin-top:.45rem;">economia docentes − custo MIIA</p>
     </div>
 
     <div class="card" style="flex:1; padding:1.75rem 1.5rem;">
@@ -305,17 +305,30 @@
         </div>
         <div class="mod-body" id="col-geracao">
           <hr class="divider" />
-          <div style="padding:1.1rem 1.25rem 1.25rem;">
-            <label class="lbl">Questões geradas</label>
-            <div style="display:flex;gap:.45rem;align-items:center;">
-              <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 200" oninput="calc()" class="inp" />
-              <select class="freq" id="geracao_freq" onchange="calc()">
-                <option value="1">/ ano</option>
-                <option value="2" selected>/ semestre</option>
-                <option value="12">/ mês</option>
-                <option value="40">/ semana</option>
-                <option value="200">/ dia</option>
-              </select>
+          <div style="padding:1.1rem 1.25rem 1.25rem; display:flex; flex-direction:column; gap:.85rem;">
+            <div>
+              <label class="lbl">Tipo de questão</label>
+              <div style="display:flex;gap:.5rem;">
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--txt);cursor:pointer;padding:.45rem .85rem;border:1.5px solid rgba(128,29,255,.2);border-radius:.6rem;flex:1;justify-content:center;transition:all .2s;" id="lbl-obj">
+                  <input type="radio" name="geracao_tipo" id="geracao_obj" value="obj" onchange="calc()" checked style="accent-color:var(--p);"> Objetiva
+                </label>
+                <label style="display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--txt);cursor:pointer;padding:.45rem .85rem;border:1.5px solid rgba(128,29,255,.2);border-radius:.6rem;flex:1;justify-content:center;transition:all .2s;" id="lbl-disc">
+                  <input type="radio" name="geracao_tipo" id="geracao_disc" value="disc" onchange="calc()" style="accent-color:var(--p);"> Discursiva
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="lbl">Questões geradas</label>
+              <div style="display:flex;gap:.45rem;align-items:center;">
+                <input type="number" id="geracao_questoes" min="1" placeholder="Ex: 200" oninput="calc()" class="inp" />
+                <select class="freq" id="geracao_freq" onchange="calc()">
+                  <option value="1">/ ano</option>
+                  <option value="2" selected>/ semestre</option>
+                  <option value="12">/ mês</option>
+                  <option value="40">/ semana</option>
+                  <option value="200">/ dia</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -482,77 +495,147 @@
   const set    = (id,v) => document.getElementById(id).textContent = v;
   const freq   = id => parseFloat(document.getElementById(id).value) || 1;
 
+  // ── Tabelas de preço MIIA ──────────────────────────────────────────────────
+
+  // Correção de Discursivas — R$/prova (tier baseado em volume mensal)
+  function precoCorrecao(volMes) {
+    if (volMes <= 15000)   return 1.60;
+    if (volMes <= 30000)   return 1.30;
+    if (volMes <= 60000)   return 1.00;
+    if (volMes <= 90000)   return 0.80;
+    if (volMes <= 300000)  return 0.65;
+    if (volMes <= 600000)  return 0.60;
+    if (volMes <= 1000000) return 0.50;
+    return 0.45;
+  }
+
+  // Geração de Questões — R$/questão (tier baseado em volume mensal)
+  function precoGeracao(volMes, tipo) {
+    if (tipo === 'disc') {
+      if (volMes <= 1000)  return 20.00;
+      if (volMes <= 2000)  return 17.00;
+      if (volMes <= 3000)  return 14.00;
+      if (volMes <= 5000)  return 11.00;
+      if (volMes <= 7000)  return  8.00;
+      if (volMes <= 10000) return  6.00;
+      return 5.00;
+    } else {
+      if (volMes <= 1000)  return 10.00;
+      if (volMes <= 2000)  return  8.50;
+      if (volMes <= 3000)  return  7.00;
+      if (volMes <= 5000)  return  5.50;
+      if (volMes <= 7000)  return  4.00;
+      if (volMes <= 10000) return  3.00;
+      return 2.50;
+    }
+  }
+
+  // ── Cálculo principal ──────────────────────────────────────────────────────
+
   function calc() {
     const vh = parseFloat(document.getElementById('valorHora').value);
     const ok = !isNaN(vh) && vh > 0;
 
-    // Correção: volume × freq_anual × 16 min
-    let hC=0, eC=0;
+    // ── Correção ──
+    let hC=0, eBrutoC=0, custoC=0, precoC=0;
     if (mods.correcao) {
-      const v = parseFloat(document.getElementById('correcao_vol').value)||0;
-      hC = v * freq('correcao_freq') * (16/60);
-      eC = ok ? hC * vh : 0;
+      const v  = parseFloat(document.getElementById('correcao_vol').value)||0;
+      const f  = freq('correcao_freq');
+      const vA = v * f;                      // volume anual
+      hC       = vA * (16/60);
+      eBrutoC  = ok ? hC * vh : 0;
+      precoC   = precoCorrecao(vA / 12);     // tier baseado em volume mensal
+      custoC   = vA * precoC;
     }
 
-    // Geração: questoes × freq_anual × 27 min
-    let hG=0, eG=0;
+    // ── Geração ──
+    let hG=0, eBrutoG=0, custoG=0, precoG=0;
     if (mods.geracao) {
-      const q = parseFloat(document.getElementById('geracao_questoes').value)||0;
-      hG = q * freq('geracao_freq') * (27/60);
-      eG = ok ? hG * vh : 0;
+      const q    = parseFloat(document.getElementById('geracao_questoes').value)||0;
+      const f    = freq('geracao_freq');
+      const qA   = q * f;
+      const tipo = document.querySelector('input[name="geracao_tipo"]:checked')?.value || 'obj';
+      hG         = qA * (27/60);
+      eBrutoG    = ok ? hG * vh : 0;
+      precoG     = precoGeracao(qA / 12, tipo);
+      custoG     = qA * precoG;
     }
 
-    // Diagramação: provas × freq_anual × 43 min
-    let hD=0, eD=0;
+    // ── Diagramação (sem custo MIIA ainda) ──
+    let hD=0, eBrutoD=0;
     if (mods.diagramacao) {
       const p = parseFloat(document.getElementById('diag_provas').value)||0;
-      hD = p * freq('diag_freq') * (43/60);
-      eD = ok ? hD * vh : 0;
+      hD      = p * freq('diag_freq') * (43/60);
+      eBrutoD = ok ? hD * vh : 0;
     }
 
-    const tH = hC + hG + hD;
-    const tE = eC + eG + eD;
+    const tH       = hC + hG + hD;
+    const tBruto   = eBrutoC + eBrutoG + eBrutoD;
+    const tCusto   = custoC + custoG;
+    const tLiquido = tBruto - tCusto;
 
-    // Métricas topo
-    set('resTotal',    tH>0&&ok ? fmtBRL(tE) : '—');
+    // ── Métricas topo ──
+    set('resTotal',    tH>0&&ok ? fmtBRL(tLiquido) : '—');
     set('resHoras',    tH>0 ? fmt(tH)+'h' : '—');
     set('resHorasSub', tH>0 ? `por ano · ${fmt(tH/48)}h por semana` : 'por ano');
     set('resEfic',     tH>0 ? '+22%' : '—');
+    if (ok && tH>0)
+      set('resCustoSub', `economia docentes ${fmtBRL(tBruto)} − custo MIIA ${fmtBRL(tCusto)}`);
 
-    // Por módulo
-    set('mod-c-eco', hC>0&&ok ? fmtBRL(eC) : '—');
+    // ── Por módulo (ROI líquido por módulo) ──
+    const roiC = eBrutoC - custoC;
+    const roiG = eBrutoG - custoG;
+    set('mod-c-eco', hC>0&&ok ? fmtBRL(roiC) : '—');
     set('mod-c-h',   hC>0 ? fmt(hC)+'h/ano' : '—');
-    set('mod-g-eco', hG>0&&ok ? fmtBRL(eG) : '—');
+    set('mod-g-eco', hG>0&&ok ? fmtBRL(roiG) : '—');
     set('mod-g-h',   hG>0 ? fmt(hG)+'h/ano' : '—');
-    set('mod-d-eco', hD>0&&ok ? fmtBRL(eD) : '—');
+    set('mod-d-eco', hD>0&&ok ? fmtBRL(eBrutoD) : '—');
     set('mod-d-h',   hD>0 ? fmt(hD)+'h/ano' : '—');
 
-    // Detalhamento
+    // ── Detalhamento ──
+    const drow = (l,v,cor) =>
+      `<div class="drow"><span style="color:rgba(28,5,43,.4);font-size:.76rem">${l}</span><span class="f-display" style="color:${cor||'var(--txt)'};font-weight:700;font-size:.82rem">${v}</span></div>`;
+
     const rows = [];
     if (mods.correcao && hC>0) {
-      const v = parseFloat(document.getElementById('correcao_vol').value)||0;
-      const f = freq('correcao_freq');
-      rows.push(['Total de provas corrigidas/ano', fmt(v*f)]);
-      rows.push(['Horas economizadas (Correção)', fmt(hC)+'h']);
+      const vA = (parseFloat(document.getElementById('correcao_vol').value)||0) * freq('correcao_freq');
+      rows.push(drow('Provas corrigidas/ano', fmt(vA)));
+      rows.push(drow('Tempo economizado', fmt(hC)+'h'));
+      if (ok) {
+        rows.push(drow('Economia docentes', fmtBRL(eBrutoC)));
+        rows.push(drow(`Custo MIIA (R$${precoC.toFixed(2).replace('.',',')}/prova)`, '− '+fmtBRL(custoC), 'var(--o)'));
+        rows.push(drow('ROI Correção', fmtBRL(roiC), roiC>=0?'var(--p)':'#e55'));
+      }
     }
     if (mods.geracao && hG>0) {
-      const q = parseFloat(document.getElementById('geracao_questoes').value)||0;
-      rows.push(['Total de questões/ano', fmt(q*freq('geracao_freq'))]);
-      rows.push(['Horas economizadas', fmt(hG)+'h']);
+      const tipo = document.querySelector('input[name="geracao_tipo"]:checked')?.value || 'obj';
+      const qA   = (parseFloat(document.getElementById('geracao_questoes').value)||0) * freq('geracao_freq');
+      rows.push(drow('Questões geradas/ano', fmt(qA)));
+      rows.push(drow('Tempo economizado', fmt(hG)+'h'));
+      if (ok) {
+        rows.push(drow('Economia docentes', fmtBRL(eBrutoG)));
+        rows.push(drow(`Custo MIIA (R$${precoG.toFixed(2).replace('.',',')}/questão)`, '− '+fmtBRL(custoG), 'var(--o)'));
+        rows.push(drow('ROI Geração', fmtBRL(roiG), roiG>=0?'var(--p)':'#e55'));
+      }
     }
     if (mods.diagramacao && hD>0) {
-      const p = parseFloat(document.getElementById('diag_provas').value)||0;
-      rows.push(['Total de provas diagramadas/ano', fmt(p*freq('diag_freq'))]);
-      rows.push(['Horas economizadas', fmt(hD)+'h']);
+      const pA = (parseFloat(document.getElementById('diag_provas').value)||0) * freq('diag_freq');
+      rows.push(drow('Provas diagramadas/ano', fmt(pA)));
+      rows.push(drow('Tempo economizado', fmt(hD)+'h'));
+      if (ok) rows.push(drow('Economia docentes', fmtBRL(eBrutoD)));
     }
-    if (ok) rows.push(['Valor hora docente', fmtBRL(vh)]);
+    if (ok && tH>0) {
+      rows.push(drow('Hora/aula docente', fmtBRL(vh)));
+      rows.push(drow('Custo MIIA total/ano', '− '+fmtBRL(tCusto), 'var(--o)'));
+      rows.push(drow('ROI Líquido total', fmtBRL(tLiquido), tLiquido>=0?'var(--p)':'#e55'));
+    }
 
     document.getElementById('detalhes').innerHTML = rows.length
-      ? rows.map(([l,v])=>`<div class="drow"><span style="color:rgba(28,5,43,.4);font-size:.76rem">${l}</span><span class="f-display" style="color:var(--txt);font-weight:700;font-size:.82rem">${v}</span></div>`).join('')
+      ? rows.join('')
       : '<p style="font-size:.78rem;color:rgba(28,5,43,.22);text-align:center;padding:.5rem 0;">Preencha os campos para ver o resultado</p>';
 
     if (tH>0 && ok) {
-      const msg = encodeURIComponent(`Olá! Calculei o ROI da MIIA: ${fmtBRL(tE)} de economia/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
+      const msg = encodeURIComponent(`Olá! Calculei o ROI da MIIA: ${fmtBRL(tLiquido)} de ROI líquido/ano e ${fmt(tH)}h recuperadas. Gostaria de saber mais!`);
       document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
 
       const subContact = encodeURIComponent(`Interesse em MIIA — ${fmtBRL(tE)} de economia estimada`);
@@ -573,10 +656,10 @@
   }
 
   function resultSummary() {
-    const eco  = document.getElementById('resTotal').textContent;
+    const roi  = document.getElementById('resTotal').textContent;
     const horas = document.getElementById('resHoras').textContent;
-    if (eco === '—') return null;
-    return { eco, horas };
+    if (roi === '—') return null;
+    return { eco: roi, horas };
   }
 
   function shareWpp() {
