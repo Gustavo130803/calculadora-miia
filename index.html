@@ -230,9 +230,9 @@
     </div>
 
     <div class="card" style="flex:1; padding:1.75rem 1.5rem;">
-      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(128,29,255,.55); margin-bottom:.5rem;">Eficiência Ganha</p>
+      <p style="font-size:.67rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(128,29,255,.55); margin-bottom:.5rem;">Payback</p>
       <p id="resEfic" class="f-display" style="font-size:clamp(1.9rem,3.5vw,2.7rem); font-weight:900; color:var(--txt); line-height:1;">—</p>
-      <p style="font-size:.73rem; color:rgba(28,5,43,.3); margin-top:.45rem;">mais capacidade operacional</p>
+      <p id="resEficSub" style="font-size:.73rem; color:rgba(28,5,43,.3); margin-top:.45rem;">retorno do investimento</p>
     </div>
 
   </div>
@@ -578,7 +578,14 @@
     set('resTotal',    tH>0&&ok ? fmtBRL(tLiquido) : '—');
     set('resHoras',    tH>0 ? fmt(tH)+'h' : '—');
     set('resHorasSub', tH>0 ? `por ano · ${fmt(tH/48)}h por semana` : 'por ano');
-    set('resEfic',     tH>0 ? '+22%' : '—');
+    const paybackMeses = (ok && tCusto > 0 && tBruto > 0) ? (tCusto / tBruto * 12) : null;
+    if (tH > 0 && paybackMeses !== null) {
+      set('resEfic', paybackMeses < 1 ? '< 1 mês' : fmt(paybackMeses) + (paybackMeses < 2 ? ' mês' : ' meses'));
+      set('resEficSub', 'para recuperar o investimento');
+    } else {
+      set('resEfic', '—');
+      set('resEficSub', 'retorno do investimento');
+    }
     if (ok && tH>0)
       set('resCustoSub', 'economia líquida anual estimada');
 
@@ -629,7 +636,8 @@
       document.getElementById('btnWpp').href = `https://wa.me/${WPP}?text=${msg}`;
 
       const subContact = encodeURIComponent(`Interesse em MIIA — ${fmtBRL(tE)} de economia estimada`);
-      const bodyContact = encodeURIComponent(`Olá,\n\nFiz uma simulação pela Calculadora de ROI da MIIA e gostaria de saber mais:\n\n• Economia financeira estimada: ${fmtBRL(tE)}/ano\n• Horas recuperadas: ${fmt(tH)}h/ano\n• Eficiência ganha: +22%\n\nAguardo contato.\n\nAtt.`);
+      const paybackTxt = paybackMeses !== null ? (paybackMeses < 1 ? '< 1 mês' : fmt(paybackMeses) + (paybackMeses < 2 ? ' mês' : ' meses')) : null;
+      const bodyContact = encodeURIComponent(`Olá,\n\nFiz uma simulação pela Calculadora de ROI da MIIA e gostaria de saber mais:\n\n• Economia financeira estimada: ${fmtBRL(tE)}/ano\n• Horas recuperadas: ${fmt(tH)}h/ano${paybackTxt ? `\n• Payback: ${paybackTxt}` : ''}\n\nAguardo contato.\n\nAtt.`);
       document.getElementById('btnContactEmail').href = `mailto:${EMAIL}?subject=${subContact}&body=${bodyContact}`;
     }
   }
@@ -646,10 +654,11 @@
   }
 
   function resultSummary() {
-    const roi  = document.getElementById('resTotal').textContent;
-    const horas = document.getElementById('resHoras').textContent;
+    const roi    = document.getElementById('resTotal').textContent;
+    const horas  = document.getElementById('resHoras').textContent;
+    const payback = document.getElementById('resEfic').textContent;
     if (roi === '—') return null;
-    return { eco: roi, horas };
+    return { eco: roi, horas, payback: payback !== '—' ? payback : null };
   }
 
   function shareWpp() {
@@ -666,7 +675,7 @@
     const url = buildShareURL();
     const subject = encodeURIComponent(s ? `ROI MIIA — ${s.eco} de economia estimada` : 'Calculadora de ROI MIIA');
     const body = encodeURIComponent(
-      s ? `Olá,\n\nSimulei o ROI da MIIA para minha instituição:\n\n• Economia financeira/ano: ${s.eco}\n• Horas recuperadas/ano: ${s.horas}\n• Eficiência ganha: +22%\n\nVeja o cálculo completo: ${url}\n\nAtt.`
+      s ? `Olá,\n\nSimulei o ROI da MIIA para minha instituição:\n\n• Economia financeira/ano: ${s.eco}\n• Horas recuperadas/ano: ${s.horas}${s.payback ? `\n• Payback: ${s.payback}` : ''}\n\nVeja o cálculo completo: ${url}\n\nAtt.`
         : `Acesse a Calculadora de ROI MIIA: ${url}`
     );
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
